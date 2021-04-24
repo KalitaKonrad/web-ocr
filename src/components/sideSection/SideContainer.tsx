@@ -3,7 +3,7 @@ import { Flex, Text } from "@chakra-ui/react";
 
 const SideContainer: React.FC = () => {
   return (
-    <Flex direction="column" h="100%" w={200} bgColor={"cyan.100"}>
+    <Flex direction="column" h="100%" w="15%" bgColor={"red.100"}>
       <Text>HELLO WORLD</Text>
     </Flex>
   );
