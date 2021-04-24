@@ -5,11 +5,11 @@ import theme from "@definitions/chakra/theme";
 import "@styles/global.css";
 
 function MyApp({ Component, pageProps }: AppProps): JSX.Element {
-    return (
-        <ChakraProvider theme={theme}>
-            <Component {...pageProps} />
-        </ChakraProvider>
-    );
+  return (
+    <ChakraProvider theme={theme}>
+      <Component {...pageProps} />
+    </ChakraProvider>
+  );
 }
 
 export default MyApp;
