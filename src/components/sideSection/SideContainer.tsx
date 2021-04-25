@@ -1,10 +1,16 @@
 import React from "react";
-import { Flex, Text } from "@chakra-ui/react";
+import { Flex } from "@chakra-ui/react";
 
-const SideContainer: React.FC = () => {
+const SideContainer: React.FC = (props) => {
   return (
-    <Flex direction="column" h="100%" w="15%" bgColor={"red.100"}>
-      <Text>HELLO WORLD</Text>
+    <Flex
+      direction="column"
+      h="100%"
+      w="15%"
+      bgColor={"red.100"}
+      alignItems={"center"}
+    >
+      {props.children}
     </Flex>
   );
 };
