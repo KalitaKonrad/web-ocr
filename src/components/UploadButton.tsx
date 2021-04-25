@@ -10,6 +10,7 @@ const UploadButton: React.FC = () => {
         loadingText="Dodawanie"
         colorScheme="red"
         variant="outline"
+        borderRadius={24}
       >
         Dodaj pliki
       </Button>
