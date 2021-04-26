@@ -1,7 +1,16 @@
 import React from "react";
 import { Flex } from "@chakra-ui/react";
 
-const SideContainer: React.FC = (props) => {
+interface SideContainerProps {
+  hasLeftBorder?: boolean;
+  hasRightBorder?: boolean;
+}
+
+const SideContainer: React.FC<SideContainerProps> = ({
+  children,
+  hasLeftBorder = false,
+  hasRightBorder = false,
+}) => {
   return (
     <Flex
       direction="column"
@@ -9,8 +18,11 @@ const SideContainer: React.FC = (props) => {
       w="15%"
       bgColor={"red.100"}
       alignItems={"center"}
+      borderColor={"red.200"}
+      borderLeftWidth={hasLeftBorder ? 1 : 0}
+      borderRightWidth={hasRightBorder ? 1 : 0}
     >
-      {props.children}
+      {children}
     </Flex>
   );
 };

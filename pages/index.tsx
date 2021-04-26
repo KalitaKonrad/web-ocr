@@ -10,14 +10,14 @@ import PreviewList from "@components/sideSection/PreviewList";
 
 const Home: React.FC = () => {
   const renderLeftSide = () => (
-    <SideContainer>
+    <SideContainer hasRightBorder>
       <SideTitleComponent title="Podgląd" />
       <PreviewList />
     </SideContainer>
   );
 
   const renderRightSide = () => (
-    <SideContainer>
+    <SideContainer hasLeftBorder>
       <SideTitleComponent title="Właściwości" />
     </SideContainer>
   );
@@ -25,7 +25,7 @@ const Home: React.FC = () => {
   const renderMainContent = () => (
     <>
       <Flex h="80%">
-        <ContentContainer />
+        <ContentContainer hasRightBorder />
         <ContentContainer>
           <TextAreaComponent />
         </ContentContainer>

@@ -22,7 +22,6 @@ interface PreviewListProps {
 
 const PreviewList: React.FC<PreviewListProps> = ({ sitesList }) => (
   <Flex
-    id={"flexID"}
     flexDirection={"column"}
     alignItems={"center"}
     flex={1}

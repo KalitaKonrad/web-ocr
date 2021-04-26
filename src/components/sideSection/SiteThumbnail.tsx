@@ -6,7 +6,7 @@ interface SiteThumbnailProps {
 }
 
 const SiteThumbnail: React.FC<SiteThumbnailProps> = ({ image }) => (
-  <Box flexShrink={0} h={120} w={20} m={5} bgColor={"gray.200"} />
+  <Box flexShrink={0} h={170} w={40} m={5} bgColor={"gray.200"} />
 );
 
 export default SiteThumbnail;
