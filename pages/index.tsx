@@ -6,11 +6,13 @@ import ContentContainer from "@components/content/ContentContainer";
 import UploadButton from "@components/UploadButton";
 import TextAreaComponent from "@components/content/TextAreaComponent";
 import SideTitleComponent from "@components/shared/SideTitleComponent";
+import PreviewList from "@components/sideSection/PreviewList";
 
 const Home: React.FC = () => {
   const renderLeftSide = () => (
     <SideContainer>
       <SideTitleComponent title="Podgląd" />
+      <PreviewList />
     </SideContainer>
   );
 
