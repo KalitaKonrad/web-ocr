@@ -17,6 +17,19 @@ const overrides = {
   ...styles,
   colors,
   fontSizes,
+  styles: {
+    global: {
+      html: {
+        height: "100%",
+      },
+      body: {
+        height: "100%",
+      },
+      "#__next": {
+        height: "100%",
+      },
+    },
+  },
 };
 
 const theme = extendTheme(overrides);
