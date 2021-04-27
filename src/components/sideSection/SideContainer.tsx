@@ -16,9 +16,9 @@ const SideContainer: React.FC<SideContainerProps> = ({
       direction="column"
       h="100%"
       w="15%"
-      bgColor={"red.100"}
-      alignItems={"center"}
-      borderColor={"red.200"}
+      bgColor="red.100"
+      alignItems="center"
+      borderColor="red.200"
       borderLeftWidth={hasLeftBorder ? 1 : 0}
       borderRightWidth={hasRightBorder ? 1 : 0}
     >

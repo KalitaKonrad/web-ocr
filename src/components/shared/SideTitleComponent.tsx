@@ -7,7 +7,7 @@ interface SideTitleProps {
 
 const SideTitleComponent: React.FC<SideTitleProps> = ({ title }) => (
   <Box m={5}>
-    <Text colorScheme={"red"}>{title}</Text>
+    <Text colorScheme="red">{title}</Text>
   </Box>
 );
 

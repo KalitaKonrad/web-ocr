@@ -12,7 +12,7 @@ const ContentContainer: React.FC<ContentContainerProps> = (props) => {
       w="50%"
       borderBottomWidth={1}
       borderRightWidth={props.hasRightBorder ? 1 : 0}
-      borderColor={"red.200"}
+      borderColor="red.200"
     >
       {props.children}
     </Flex>

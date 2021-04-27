@@ -22,10 +22,10 @@ interface PreviewListProps {
 
 const PreviewList: React.FC<PreviewListProps> = ({ sitesList }) => (
   <Flex
-    flexDirection={"column"}
-    alignItems={"center"}
+    flexDirection="column"
+    alignItems="center"
     flex={1}
-    overflowY={"scroll"}
+    overflowY="scroll"
     css={{
       "&::-webkit-scrollbar": {
         display: "none",
