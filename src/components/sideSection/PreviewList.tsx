@@ -33,7 +33,7 @@ const PreviewList: React.FC<PreviewListProps> = ({ sitesList }) => (
     }}
   >
     {sitesListMock.map((item) => (
-      <SiteThumbnail />
+      <SiteThumbnail key={item.id} />
     ))}
   </Flex>
 );

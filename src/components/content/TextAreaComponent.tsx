@@ -7,9 +7,9 @@ const TextAreaComponent: React.FC = (props) => {
       <Textarea
         borderWidth={0}
         placeholder="Dodaj plik aby rozpocząć rozpoznawanie tekstu"
-        resize={"none"}
-        size={"lg"}
-        variant={"outline"}
+        resize="none"
+        size="lg"
+        variant="outline"
         isDisabled
       />
     </Box>
