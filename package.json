@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "postbuild": "pwd",
+    "postbuild": "ls -al",
     "start": "next start",
     "lint": "eslint **/*.{js,jsx,ts,tsx}",
     "prettier": "prettier --write **/*.{js,jsx,ts,tsx}"
