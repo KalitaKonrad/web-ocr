@@ -57,18 +57,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const words = operation.name.split("/");
   console.log(words[3]);
-  const operationId = words[3];
-
-  const axios = require("axios");
-
-  axios
-    .get(`https://vision.googleapis.com/v1/operations/${operationId}`)
-    .then(function (response) {
-      // handle success
-      console.log(response);
-    })
-    .catch(function (error) {
-      // handle error
-      console.log(error);
-    });
 };
