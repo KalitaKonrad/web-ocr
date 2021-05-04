@@ -47,14 +47,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     ],
   };
 
-  const [operation] = await client.asyncBatchAnnotateFiles(request);
-  const [filesResponse] = await operation.promise();
-  const destinationUri =
-    filesResponse.responses[0].outputConfig.gcsDestination.uri;
-  console.log("Json saved to: " + destinationUri);
-  console.log("filesResponse ===> ", filesResponse);
-  console.log("operation name ===> ", operation.name);
+  // Make the synchronous batch request.
+  // const [operation] = await client.asyncBatchAnnotateFiles(request);
 
-  const words = operation.name.split("/");
-  console.log(words[3]);
+  const [result] = await client.batchAnnotateFiles(request);
+
+  // Process the results, just get the first result, since only one file was sent in this
+  // sample.
+  const responses = result.responses[0].responses;
+  res.json(responses);
+
 };
