@@ -56,5 +56,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // sample.
   const responses = result.responses[0].responses;
   res.json(responses);
-
 };
