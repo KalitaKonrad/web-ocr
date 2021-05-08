@@ -1,7 +1,11 @@
 import React from "react";
 import { Box, Textarea } from "@chakra-ui/react";
 
-const TextAreaComponent: React.FC = (props) => {
+interface TextAreaProps {
+  detectedText: string;
+}
+
+const TextAreaComponent: React.FC<TextAreaProps> = ({ detectedText }) => {
   return (
     <Box my={5}>
       <Textarea
@@ -10,7 +14,8 @@ const TextAreaComponent: React.FC = (props) => {
         resize="none"
         size="lg"
         variant="outline"
-        isDisabled
+        isDisabled={detectedText === ""}
+        value={detectedText}
       />
     </Box>
   );

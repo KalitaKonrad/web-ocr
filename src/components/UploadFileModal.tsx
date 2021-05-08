@@ -11,17 +11,20 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
+import axios from "axios";
 
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
   setFileName(fileName): void;
+  setDetectedText(text): void;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
   setFileName,
+  setDetectedText,
 }) => {
   const [inputValue, setInputValue] = useState("");
 
@@ -55,9 +58,28 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     onClose();
   };
 
+  const getDetectedTextFromResponse = (response) => {
+    const { text } = response.data[0].fullTextAnnotation;
+    setDetectedText(text);
+  };
+
+  const getDetection = () => {
+    axios
+      .get("http://localhost:3000/api/getOcr")
+      .then((response) => {
+        // handle success
+        getDetectedTextFromResponse(response);
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error);
+      });
+  };
+
   const onSave = () => {
     setFileName(inputValue);
     onClose();
+    getDetection();
   };
 
   return (

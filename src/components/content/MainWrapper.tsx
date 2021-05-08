@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Flex, useDisclosure } from "@chakra-ui/react";
 import ContentContainer from "@components/content/ContentContainer";
 import TextAreaComponent from "@components/content/TextAreaComponent";
@@ -8,17 +8,18 @@ import UploadFileModal from "@components/UploadFileModal";
 const MainWrapper: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [fileName, setFileName] = useState("");
+  const [detectedText, setDetectedText] = useState("");
 
   return (
     <>
       <Flex h="80%">
         <ContentContainer hasRightBorder />
         <ContentContainer>
-          <TextAreaComponent />
+          <TextAreaComponent detectedText={detectedText} />
         </ContentContainer>
       </Flex>
-      <UploadButton onOpen={(onOpen, fileName)} />
-      <UploadFileModal {...{ isOpen, onClose, setFileName }} />
+      <UploadButton {...{ onOpen, fileName }} />
+      <UploadFileModal {...{ isOpen, onClose, setFileName, setDetectedText }} />
     </>
   );
 };
