@@ -7,6 +7,7 @@ import UploadButton from "@components/UploadButton";
 import TextAreaComponent from "@components/content/TextAreaComponent";
 import SideTitleComponent from "@components/shared/SideTitleComponent";
 import PreviewList from "@components/sideSection/PreviewList";
+import MainWrapper from "@components/content/MainWrapper";
 
 const Home: React.FC = () => {
   const renderLeftSide = () => (
@@ -22,17 +23,7 @@ const Home: React.FC = () => {
     </SideContainer>
   );
 
-  const renderMainContent = () => (
-    <>
-      <Flex h="80%">
-        <ContentContainer hasRightBorder />
-        <ContentContainer>
-          <TextAreaComponent />
-        </ContentContainer>
-      </Flex>
-      <UploadButton />
-    </>
-  );
+  const renderMainContent = () => <MainWrapper />;
 
   return (
     <Flex h="100%" justifyContent="space-between">

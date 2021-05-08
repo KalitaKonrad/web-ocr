@@ -1,15 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-// import account from "../../secrets/account.json";
-
-// console.log(account);
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const path = require("path");
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-// const account = require(path.resolve("secrets/account.json"));
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  // res.status(200).json({ name: "John Doe" });
-  // Imports the Google Cloud client libraries
   const vision = require("@google-cloud/vision").v1;
 
   // Creates a client
@@ -47,14 +38,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     ],
   };
 
-  // Make the synchronous batch request.
-  // const [operation] = await client.asyncBatchAnnotateFiles(request);
-
   const [result] = await client.batchAnnotateFiles(request);
 
   // Process the results, just get the first result, since only one file was sent in this
   // sample.
   const responses = result.responses[0].responses;
   res.json(responses);
-
 };
