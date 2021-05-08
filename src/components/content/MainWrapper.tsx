@@ -4,6 +4,7 @@ import ContentContainer from "@components/content/ContentContainer";
 import TextAreaComponent from "@components/content/TextAreaComponent";
 import UploadButton from "@components/UploadButton";
 import UploadFileModal from "@components/UploadFileModal";
+import PdfViewerComponent from "./PdfViewerComponent";
 
 const MainWrapper: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -13,7 +14,9 @@ const MainWrapper: React.FC = () => {
   return (
     <>
       <Flex h="80%">
-        <ContentContainer hasRightBorder />
+        <ContentContainer hasRightBorder>
+          <PdfViewerComponent />
+        </ContentContainer>
         <ContentContainer>
           <TextAreaComponent detectedText={detectedText} />
         </ContentContainer>
