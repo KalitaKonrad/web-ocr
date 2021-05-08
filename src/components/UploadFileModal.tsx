@@ -11,7 +11,7 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { useDetectionQuery } from "../services/useDetectionQuery";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -19,6 +19,7 @@ interface UploadFileModalProps {
   setFileName(fileName): void;
   setDetectedText(text): void;
   fileName: string;
+  setIsAlertOpen(arg): void;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
@@ -27,7 +28,12 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   setFileName,
   setDetectedText,
   fileName,
+  setIsAlertOpen,
 }) => {
+  const { isLoading, error, data, refetch, isFetched } = useDetectionQuery(
+    fileName,
+  );
+
   const [inputValue, setInputValue] = useState("");
 
   useEffect(() => {
@@ -35,6 +41,16 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
       getDetection();
     }
   }, [fileName]);
+
+  useEffect(() => {
+    if (error) {
+      setIsAlertOpen(true);
+      return;
+    }
+    if (isFetched) {
+      setDetectedText(data[0]?.fullTextAnnotation.text);
+    }
+  }, [isFetched]);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -66,22 +82,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     onClose();
   };
 
-  const getDetectedTextFromResponse = (response) => {
-    const { text } = response.data[0].fullTextAnnotation;
-    setDetectedText(text);
-  };
-
-  const getDetection = () => {
-    axios
-      .get(`http://localhost:3000/api/getOcr/${fileName}`)
-      .then((response) => {
-        // handle success
-        getDetectedTextFromResponse(response);
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      });
+  const getDetection = async () => {
+    await refetch();
   };
 
   const onSave = () => {
