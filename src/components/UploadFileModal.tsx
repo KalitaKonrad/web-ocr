@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   FormControl,
@@ -18,6 +18,7 @@ interface UploadFileModalProps {
   onClose(): void;
   setFileName(fileName): void;
   setDetectedText(text): void;
+  fileName: string;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
@@ -25,8 +26,15 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   isOpen,
   setFileName,
   setDetectedText,
+  fileName,
 }) => {
   const [inputValue, setInputValue] = useState("");
+
+  useEffect(() => {
+    if (fileName !== "") {
+      getDetection();
+    }
+  }, [fileName]);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -65,7 +73,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
   const getDetection = () => {
     axios
-      .get("http://localhost:3000/api/getOcr")
+      .get(`http://localhost:3000/api/getOcr/${fileName}`)
       .then((response) => {
         // handle success
         getDetectedTextFromResponse(response);
@@ -79,7 +87,6 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const onSave = () => {
     setFileName(inputValue);
     onClose();
-    getDetection();
   };
 
   return (

@@ -18,8 +18,10 @@ const MainWrapper: React.FC = () => {
           <TextAreaComponent detectedText={detectedText} />
         </ContentContainer>
       </Flex>
-      <UploadButton {...{ onOpen, fileName }} />
-      <UploadFileModal {...{ isOpen, onClose, setFileName, setDetectedText }} />
+      <UploadButton {...{ onOpen }} />
+      <UploadFileModal
+        {...{ isOpen, onClose, setFileName, setDetectedText, fileName }}
+      />
     </>
   );
 };

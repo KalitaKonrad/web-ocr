@@ -4,10 +4,9 @@ import axios from "axios";
 
 interface UploadButtonProps {
   onOpen(): void;
-  fileName: string;
 }
 
-const UploadButton: React.FC<UploadButtonProps> = ({ onOpen, fileName }) => {
+const UploadButton: React.FC<UploadButtonProps> = ({ onOpen }) => {
   return (
     <Box my={50} display={"flex"} justifyContent={"center"}>
       <Button
