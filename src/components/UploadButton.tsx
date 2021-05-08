@@ -3,9 +3,10 @@ import { Button, Box } from "@chakra-ui/react";
 
 interface UploadButtonProps {
   onOpen(): void;
+  fileName: string;
 }
 
-const UploadButton: React.FC<UploadButtonProps> = ({ onOpen }) => {
+const UploadButton: React.FC<UploadButtonProps> = ({ onOpen, fileName }) => {
   return (
     <Box my={50} display={"flex"} justifyContent={"center"}>
       <Button

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Flex, useDisclosure } from "@chakra-ui/react";
 import ContentContainer from "@components/content/ContentContainer";
 import TextAreaComponent from "@components/content/TextAreaComponent";
@@ -7,6 +7,7 @@ import UploadFileModal from "@components/UploadFileModal";
 
 const MainWrapper: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [fileName, setFileName] = useState("");
 
   return (
     <>
@@ -16,8 +17,8 @@ const MainWrapper: React.FC = () => {
           <TextAreaComponent />
         </ContentContainer>
       </Flex>
-      <UploadButton onOpen={onOpen} />
-      <UploadFileModal {...{ isOpen, onClose }} />
+      <UploadButton onOpen={(onOpen, fileName)} />
+      <UploadFileModal {...{ isOpen, onClose, setFileName }} />
     </>
   );
 };
