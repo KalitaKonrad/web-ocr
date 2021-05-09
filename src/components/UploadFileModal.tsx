@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Button,
-  FormControl,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -11,7 +9,8 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import axios from "axios";
+import { useDetectionQuery } from "../services/useDetectionQuery";
+import FileInput from "./FileInput";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -28,25 +27,18 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   setDetectedText,
   fileName,
 }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
+  const { error, data, isFetched } = useDetectionQuery(fileName);
+
+  const [selectedFile, setSelectedFile] = useState<File>(null);
 
   useEffect(() => {
-    if (fileName !== "") {
-      getDetection();
+    if (error) {
+      return;
     }
-  }, [fileName]);
-
-  const renderInputForm = () => (
-    <FormControl marginTop={7}>
-      <Input
-        placeholder="Nazwa pliku"
-        type="file"
-        accept=".pdf"
-        // value={selectedFile}
-        onChange={(e) => setSelectedFile(e.target.files[0])}
-      />
-    </FormControl>
-  );
+    if (isFetched) {
+      setDetectedText(data[0]?.fullTextAnnotation.text);
+    }
+  }, [isFetched]);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
@@ -55,31 +47,12 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
         web-ocr-storage. Przykładowa nazwa pliku "lorem-ipsum.pdf".
       </Text>
 
-      {renderInputForm()}
+      {<FileInput setFile={setSelectedFile} file={selectedFile} />}
     </ModalBody>
   );
 
   const onCloseModal = () => {
-    // setInputValue("");
     onClose();
-  };
-
-  const getDetectedTextFromResponse = (response) => {
-    const { text } = response.data[0].fullTextAnnotation;
-    setDetectedText(text);
-  };
-
-  const getDetection = () => {
-    axios
-      .get(`http://localhost:3000/api/getOcr/${fileName}`)
-      .then((response) => {
-        // handle success
-        getDetectedTextFromResponse(response);
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      });
   };
 
   const onSave = () => {
