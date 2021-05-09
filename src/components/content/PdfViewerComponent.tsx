@@ -49,7 +49,6 @@ const PdfViewerComponent = ({ file }) => {
     );
     canvasDiv["current"].style.width = `${width}px`;
     canvasDiv["current"].style.height = `${width * 1.4142857142857}px`;
-
     documentDiv["current"].style.display = "flex";
     documentDiv["current"].style.justifyContent = "center";
     documentDiv["current"].style.alignItems = "center";
