@@ -10,12 +10,13 @@ const MainWrapper: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [fileName, setFileName] = useState("");
   const [detectedText, setDetectedText] = useState("");
+  const [file, setFile] = useState(null);
 
   return (
     <>
       <Flex h="80%">
         <ContentContainer hasRightBorder>
-          <PdfViewerComponent />
+          <PdfViewerComponent file={file} />
         </ContentContainer>
         <ContentContainer>
           <TextAreaComponent detectedText={detectedText} />
@@ -23,7 +24,7 @@ const MainWrapper: React.FC = () => {
       </Flex>
       <UploadButton {...{ onOpen }} />
       <UploadFileModal
-        {...{ isOpen, onClose, setFileName, setDetectedText, fileName }}
+        {...{ isOpen, onClose, setFile, setDetectedText, fileName }}
       />
     </>
   );

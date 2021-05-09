@@ -16,7 +16,7 @@ import axios from "axios";
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
-  setFileName(fileName): void;
+  setFile(file): void;
   setDetectedText(text): void;
   fileName: string;
 }
@@ -24,11 +24,11 @@ interface UploadFileModalProps {
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
-  setFileName,
+  setFile,
   setDetectedText,
   fileName,
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
     if (fileName !== "") {
@@ -36,16 +36,14 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     }
   }, [fileName]);
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
   const renderInputForm = () => (
     <FormControl marginTop={7}>
       <Input
         placeholder="Nazwa pliku"
-        value={inputValue}
-        onChange={handleInputChange}
+        type="file"
+        accept=".pdf"
+        // value={selectedFile}
+        onChange={(e) => setSelectedFile(e.target.files[0])}
       />
     </FormControl>
   );
@@ -62,7 +60,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   );
 
   const onCloseModal = () => {
-    setInputValue("");
+    // setInputValue("");
     onClose();
   };
 
@@ -85,7 +83,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const onSave = () => {
-    setFileName(inputValue);
+    setFile(selectedFile);
     onClose();
   };
 
