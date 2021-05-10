@@ -10,7 +10,6 @@ export const useDetectionQuery = (fileName: string) => {
       const response = await axios.get(
         `http://localhost:3000/api/getOcr/${fileName}`,
       );
-      console.log("AXIOS response");
       return response.data;
     },
     {

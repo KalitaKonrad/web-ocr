@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Button,
-  FormControl,
-  Input,
   Modal,
   ModalBody,
   ModalContent,
@@ -12,59 +10,42 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useDetectionQuery } from "../services/useDetectionQuery";
+import FileInput from "./FileInput";
 
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
-  setFileName(fileName): void;
+  file: File;
+  setFile(file): void;
   setDetectedText(text): void;
-  fileName: string;
-  setIsAlertOpen(arg): void;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
-  setFileName,
+  setFile,
   setDetectedText,
-  fileName,
+  file,
   setIsAlertOpen,
 }) => {
-  const { isLoading, error, data, refetch, isFetched } = useDetectionQuery(
-    fileName,
-  );
+  const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
 
-  const [inputValue, setInputValue] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File>(null);
 
   useEffect(() => {
-    if (fileName !== "") {
-      getDetection();
+    if (file?.name) {
+      refetch();
     }
-  }, [fileName]);
+  }, [file]);
 
   useEffect(() => {
     if (error) {
-      setIsAlertOpen(true);
       return;
     }
-    if (isFetched) {
+    if (isSuccess) {
       setDetectedText(data[0]?.fullTextAnnotation.text);
     }
-  }, [isFetched]);
-
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
-
-  const renderInputForm = () => (
-    <FormControl marginTop={7}>
-      <Input
-        placeholder="Nazwa pliku"
-        value={inputValue}
-        onChange={handleInputChange}
-      />
-    </FormControl>
-  );
+  }, [data]);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
@@ -73,21 +54,16 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
         web-ocr-storage. Przykładowa nazwa pliku "lorem-ipsum.pdf".
       </Text>
 
-      {renderInputForm()}
+      {<FileInput setFile={setSelectedFile} file={selectedFile} />}
     </ModalBody>
   );
 
   const onCloseModal = () => {
-    setInputValue("");
     onClose();
   };
 
-  const getDetection = async () => {
-    await refetch();
-  };
-
   const onSave = () => {
-    setFileName(inputValue);
+    setFile(selectedFile);
     onClose();
   };
 
