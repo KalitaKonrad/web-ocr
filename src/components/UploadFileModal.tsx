@@ -26,6 +26,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   setFile,
   setDetectedText,
   file,
+  setIsAlertOpen,
 }) => {
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
 

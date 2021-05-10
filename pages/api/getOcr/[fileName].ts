@@ -9,7 +9,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const bucketName = "web-ocr-storage";
   // Path to PDF file within bucket
   const { fileName } = req.query;
-  console.log("===>", fileName);
   // The folder to store the results
   const outputPrefix = "outputs";
 
