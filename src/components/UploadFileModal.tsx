@@ -64,7 +64,10 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const uploadLocalPdf = async (localFile) => {
-    axios.post("/api/uploadPdf/file", localFile);
+    await axios.post(
+      `http://localhost:3000/api/uploadPdf/${localFile.path}`,
+      localFile,
+    );
   };
 
   const onSave = () => {

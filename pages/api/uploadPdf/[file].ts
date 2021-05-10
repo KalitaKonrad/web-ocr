@@ -1,7 +1,13 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import formidable from "formidable";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  console.log("witam");
   const { Storage } = require("@google-cloud/storage");
 
   // The ID of your GCS bucket
@@ -9,7 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   // The path to your file to upload
   const filePath = req.query.file;
-
+  console.log(filePath);
   // The new ID for your GCS file
   const destFileName = req.query.file;
 
