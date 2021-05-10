@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useDetectionQuery } from "../services/useDetectionQuery";
 import FileInput from "./FileInput";
+import axios from "axios";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -62,8 +63,13 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     onClose();
   };
 
+  const uploadLocalPdf = async (localFile) => {
+    axios.post("/api/uploadPdf/file", localFile);
+  };
+
   const onSave = () => {
     setFile(selectedFile);
+    uploadLocalPdf(selectedFile);
     onClose();
   };
 
