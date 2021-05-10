@@ -8,10 +8,8 @@ import PdfViewerComponent from "./PdfViewerComponent";
 
 const MainWrapper: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [fileName, setFileName] = useState("");
   const [detectedText, setDetectedText] = useState("");
   const [file, setFile] = useState(null);
-
   return (
     <>
       <Flex h="80%">
@@ -24,7 +22,7 @@ const MainWrapper: React.FC = () => {
       </Flex>
       <UploadButton {...{ onOpen }} />
       <UploadFileModal
-        {...{ isOpen, onClose, setFile, setDetectedText, fileName }}
+        {...{ isOpen, onClose, file, setFile, setDetectedText }}
       />
     </>
   );

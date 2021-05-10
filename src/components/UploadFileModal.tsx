@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -15,9 +15,9 @@ import FileInput from "./FileInput";
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
+  file: File;
   setFile(file): void;
   setDetectedText(text): void;
-  fileName: string;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
@@ -25,20 +25,26 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   isOpen,
   setFile,
   setDetectedText,
-  fileName,
+  file,
 }) => {
-  const { error, data, isFetched } = useDetectionQuery(fileName);
+  const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
 
   const [selectedFile, setSelectedFile] = useState<File>(null);
+
+  useEffect(() => {
+    if (file?.name) {
+      refetch();
+    }
+  }, [file]);
 
   useEffect(() => {
     if (error) {
       return;
     }
-    if (isFetched) {
+    if (isSuccess) {
       setDetectedText(data[0]?.fullTextAnnotation.text);
     }
-  }, [isFetched]);
+  }, [data]);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>

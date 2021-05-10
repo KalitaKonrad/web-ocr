@@ -1,4 +1,4 @@
-import { Box, Button, FormControl, Input, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -13,7 +13,7 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file }) => {
   const [fileError, setFileError] = useState("");
 
   const onDrop = useCallback(([file]) => {
-    if (file.size > MAX_FILE_SIZE) {
+    if (file?.size > MAX_FILE_SIZE) {
       setFileError(
         `Za duży plik, musi ważyć poniżej ${Math.floor(
           MAX_FILE_SIZE / (1024 * 1024),
@@ -48,6 +48,60 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file }) => {
     console.log("submit");
   };
 
+  const renderSpaceToUploadFile = () => (
+    <Box height="100%">
+      <Box
+        {...getRootProps({
+          isDragActive,
+          isDragAccept,
+          isDragReject,
+        })}
+        height="100%"
+        _hover={{ cursor: "pointer" }}
+      >
+        <Input placeholder="Nazwa pliku" {...getInputProps()} size="sm" />
+        <Box
+          height="100%"
+          style={{
+            background: isDragActive ? "#ddd" : "#eee",
+          }}
+        >
+          <Box
+            style={{ color: isDragReject && "red" }}
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+          >
+            {!isDragActive
+              ? "Przeciągnij tutaj"
+              : isDragReject
+              ? "Możesz dodać tylko pliki pdf"
+              : "Przeciągnij swój obraz tutaj"}
+          </Box>
+        </Box>
+      </Box>
+      {fileError && <Text color="red.400">{fileError}</Text>}
+    </Box>
+  );
+
+  const renderUploadedFile = () => (
+    <Flex alignItems="center" justifyContent="center" height="100%">
+      <Box borderRadius={5} padding={2}>
+        <Button
+          _hover={{
+            backgroundColor: "red.200",
+            border: "1px solid red.300",
+            cursor: "pointer",
+          }}
+          onClick={onFileRemove}
+        >
+          Plik: {file.name}
+        </Button>
+      </Box>
+    </Flex>
+  );
+
   return (
     <Box height={200}>
       <form
@@ -57,66 +111,7 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file }) => {
         encType="multipart/form-data"
       >
         <FormControl marginTop={7} height="100%">
-          {!file ? (
-            <Box height="100%">
-              <Box
-                {...getRootProps({
-                  isDragActive,
-                  isDragAccept,
-                  isDragReject,
-                })}
-                height="100%"
-                _hover={{ cursor: "pointer" }}
-              >
-                <Input
-                  placeholder="Nazwa pliku"
-                  {...getInputProps()}
-                  size="sm"
-                />
-                <Box
-                  height="100%"
-                  style={{
-                    background: isDragActive ? "#ddd" : "#eee",
-                  }}
-                >
-                  <Box
-                    style={{ color: isDragReject && "red" }}
-                    display="flex"
-                    alignItems="center"
-                    justifyContent="center"
-                    height="100%"
-                  >
-                    {!isDragActive
-                      ? "Drag your pdf file here"
-                      : isDragReject
-                      ? "Ooops, only pdf files are accepted!"
-                      : "Drop your image here to upload"}
-                  </Box>
-                </Box>
-              </Box>
-              {fileError && <Text color="red.400">{fileError}</Text>}
-            </Box>
-          ) : (
-            <Box
-              display="flex"
-              alignItems="center"
-              justifyContent="center"
-              height="100%"
-            >
-              <Box borderRadius={5} padding={2}>
-                <Button
-                  _hover={{
-                    backgroundColor: "red.200",
-                    border: "1px solid red.300",
-                    cursor: "pointer",
-                  }}
-                  onClick={onFileRemove}
-                >
-                  Plik: {file.name}
-                </Button>
-              </Box>
-            </Box>
-          )}
+          {!file ? renderSpaceToUploadFile() : renderUploadedFile()}
         </FormControl>
       </form>
     </Box>
