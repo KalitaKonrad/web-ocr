@@ -12,6 +12,7 @@ import {
 import { useDetectionQuery } from "../../services/useDetectionQuery";
 import FileInput from "./FileInput";
 import { AppContext } from "src/appContext/appContext";
+import axios from "axios";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -58,8 +59,19 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     onClose();
   };
 
+  const uploadLocalPdf = async (localFile) => {
+    var formData = new FormData();
+    formData.append("file", localFile);
+    axios.post("/api/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
   const onSave = () => {
     setFile(selectedFile);
+    uploadLocalPdf(selectedFile);
     onClose();
   };
 

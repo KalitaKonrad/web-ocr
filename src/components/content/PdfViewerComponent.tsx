@@ -67,11 +67,6 @@ const PdfViewerComponent = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, [file]);
 
-  useEffect(() => {
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const renderButtonGroup = () => (
     <ButtonGroup bottom={2} pos="absolute" variant="outline" spacing="6">
       <Button
