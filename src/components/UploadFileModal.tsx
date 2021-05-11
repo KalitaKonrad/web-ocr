@@ -11,6 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { useDetectionQuery } from "../services/useDetectionQuery";
 import FileInput from "./FileInput";
+import axios from "axios";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -31,6 +32,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
 
   const [selectedFile, setSelectedFile] = useState<File>(null);
+  const [path, setPath] = useState("");
 
   useEffect(() => {
     if (file?.name) {
@@ -62,8 +64,19 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     onClose();
   };
 
+  const uploadLocalPdf = async (localFile) => {
+    var formData = new FormData();
+    formData.append("file", localFile);
+    axios.post("/api/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  };
+
   const onSave = () => {
     setFile(selectedFile);
+    uploadLocalPdf(selectedFile);
     onClose();
   };
 
