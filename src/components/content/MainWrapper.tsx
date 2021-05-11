@@ -14,7 +14,7 @@ const MainWrapper: React.FC = () => {
 
   return (
     <>
-      <Flex minH="80vh" display="flex" flexWrap="wrap" alignItems="stretch">
+      <Flex h="80vh" display="flex" flexWrap="wrap" alignItems="stretch">
         <ContentContainer hasRightBorder>
           <PdfViewerComponent />
         </ContentContainer>

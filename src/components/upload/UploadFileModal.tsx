@@ -71,6 +71,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
   const onSave = () => {
     setFile(selectedFile);
+    setDetectedText("");
     uploadLocalPdf(selectedFile);
     onClose();
   };

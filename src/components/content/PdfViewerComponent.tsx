@@ -46,10 +46,7 @@ const PdfViewerComponent = () => {
     documentDiv["current"].style.width = "100%";
 
     const width = Math.min(
-      Math.floor(
-        documentDiv["current"].getBoundingClientRect().height /
-          PDF_SCALE_FACTOR,
-      ),
+      Math.floor((window.innerHeight * 0.8) / PDF_SCALE_FACTOR),
       documentDiv["current"].getBoundingClientRect().width,
     );
     canvasDiv["current"].style.width = `${width}px`;
@@ -91,9 +88,9 @@ const PdfViewerComponent = () => {
   );
 
   return (
-    <Box h="100%">
+    <Box maxh="100%" h="100%">
       {file ? (
-        <Box h="100%" position="relative">
+        <Box h="100%" maxh="100%" position="relative">
           <Document
             inputRef={documentDiv}
             file={url}
