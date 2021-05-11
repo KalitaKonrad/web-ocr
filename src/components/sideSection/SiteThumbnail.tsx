@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { Box } from "@chakra-ui/react";
+import { Page } from "react-pdf";
 
 interface SiteThumbnailProps {
-  image?: string;
+  pageNumber: number;
 }
 
-const SiteThumbnail: React.FC<SiteThumbnailProps> = ({ image }) => (
-  <Box flexShrink={0} h={170} w={40} m={5} bgColor="gray.200" />
-);
+const SiteThumbnail: React.FC<SiteThumbnailProps> = ({ pageNumber }) => {
+  return (
+    <Box w="100%" marginBottom="1em">
+      <Page scale={0.2} renderTextLayer={false} pageNumber={pageNumber} />
+    </Box>
+  );
+};
 
 export default SiteThumbnail;

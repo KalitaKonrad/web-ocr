@@ -9,7 +9,8 @@ const ContentContainer: React.FC<ContentContainerProps> = (props) => {
   return (
     <Flex
       direction="column"
-      w="50%"
+      flex={1}
+      minWidth="13em"
       borderBottomWidth={1}
       borderRightWidth={props.hasRightBorder ? 1 : 0}
       borderColor="red.200"

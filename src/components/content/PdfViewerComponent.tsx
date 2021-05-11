@@ -4,7 +4,7 @@ import { Document, Page, pdfjs } from "react-pdf";
 import { AppContext } from "src/appContext/appContext";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const PDF_SCALE_FACTOR = 1.4;
+const PDF_SCALE_FACTOR = 1.41;
 
 const PdfViewerComponent = () => {
   const [numPages, setNumPages] = useState(null);

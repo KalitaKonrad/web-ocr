@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Spacer } from "@chakra-ui/react";
 import SiteThumbnail from "@components/sideSection/SiteThumbnail";
 import { AppContext } from "src/appContext/appContext";
 import { Document, pdfjs } from "react-pdf";
@@ -11,6 +11,7 @@ interface PreviewListProps {
 
 const PreviewList: React.FC<PreviewListProps> = () => {
   const { file } = useContext(AppContext);
+  const [numPages, setNumPages] = useState<number>(0);
   const [url, setUrl] = useState<string>("");
 
   useEffect(() => {
@@ -19,8 +20,19 @@ const PreviewList: React.FC<PreviewListProps> = () => {
     }
   }, [file]);
 
-  const onDocumentLoadSuccess = () => {
-    console.log("witam pdf");
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
+  const generatePages = () => {
+    const pageNumbers: Array<number> = [];
+    for (let i = 0; i < numPages; ++i) pageNumbers.push(i + 1);
+    console.log(pageNumbers);
+    return pageNumbers.map((pageNum) => (
+      <>
+        <SiteThumbnail pageNumber={pageNum} />
+      </>
+    ));
   };
 
   return (
@@ -36,7 +48,7 @@ const PreviewList: React.FC<PreviewListProps> = () => {
       }}
     >
       <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
-        <SiteThumbnail></SiteThumbnail>
+        {generatePages()}
       </Document>
     </Flex>
   );
