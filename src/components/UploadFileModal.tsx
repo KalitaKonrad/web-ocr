@@ -32,6 +32,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
 
   const [selectedFile, setSelectedFile] = useState<File>(null);
+  const [path, setPath] = useState("");
 
   useEffect(() => {
     if (file?.name) {
@@ -64,10 +65,13 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const uploadLocalPdf = async (localFile) => {
-    await axios.post(
-      `http://localhost:3000/api/uploadPdf/${localFile.path}`,
-      localFile,
-    );
+    var formData = new FormData();
+    formData.append("file", localFile);
+    axios.post("/api/upload", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 
   const onSave = () => {
