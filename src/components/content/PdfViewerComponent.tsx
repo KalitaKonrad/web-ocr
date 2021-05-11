@@ -1,22 +1,22 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Box, Button, ButtonGroup, Flex, Text } from "@chakra-ui/react";
 import { Document, Page, pdfjs } from "react-pdf";
+import { AppContext } from "src/appContext/appContext";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const PDF_SCALE_FACTOR = 1.4;
 
-const PdfViewerComponent = ({ file }) => {
+const PdfViewerComponent = () => {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
-  const [width, setWidth] = useState(0);
   const [url, setUrl] = useState(null);
+  const { file } = useContext(AppContext);
 
   const canvas = useRef() as any;
   const documentDiv = useRef() as any;
   const canvasDiv = useRef() as any;
 
   const handleResize = () => {
-    setWidth(window.innerWidth);
     onCanvasLoadSuccess();
   };
 
@@ -60,7 +60,6 @@ const PdfViewerComponent = ({ file }) => {
   };
 
   useEffect(() => {
-    setWidth(window.innerWidth);
     if (file) {
       setUrl(URL.createObjectURL(file));
     }
@@ -69,7 +68,6 @@ const PdfViewerComponent = ({ file }) => {
   }, [file]);
 
   useEffect(() => {
-    setWidth(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);

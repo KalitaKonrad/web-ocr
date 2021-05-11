@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Button,
   Modal,
@@ -9,27 +9,23 @@ import {
   ModalOverlay,
   Text,
 } from "@chakra-ui/react";
-import { useDetectionQuery } from "../services/useDetectionQuery";
+import { useDetectionQuery } from "../../services/useDetectionQuery";
 import FileInput from "./FileInput";
+import { AppContext } from "src/appContext/appContext";
 
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
-  file: File;
-  setFile(file): void;
   setDetectedText(text): void;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
-  setFile,
   setDetectedText,
-  file,
-  setIsAlertOpen,
 }) => {
+  const { file, setFile } = useContext(AppContext);
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
-
   const [selectedFile, setSelectedFile] = useState<File>(null);
 
   useEffect(() => {
