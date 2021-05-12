@@ -25,7 +25,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   isOpen,
   setDetectedText,
 }) => {
-  const { file, setFile } = useContext(AppContext);
+  const { file, setFile, selectedPage } = useContext(AppContext);
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
   const [selectedFile, setSelectedFile] = useState<File>(null);
 
@@ -40,9 +40,9 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
       return;
     }
     if (isSuccess) {
-      setDetectedText(data[0]?.fullTextAnnotation.text);
+      setDetectedText(data[selectedPage - 1]?.fullTextAnnotation.text);
     }
-  }, [data]);
+  }, [selectedPage, data]);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
