@@ -8,9 +8,8 @@ const PDF_SCALE_FACTOR = 1.41;
 
 const PdfViewerComponent = () => {
   const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
   const [url, setUrl] = useState(null);
-  const { file } = useContext(AppContext);
+  const { file, selectedPage, setSelectedPage } = useContext(AppContext);
 
   const canvas = useRef() as any;
   const documentDiv = useRef() as any;
@@ -22,19 +21,15 @@ const PdfViewerComponent = () => {
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
-    setPageNumber(1);
-  };
-
-  const changePage = (offset) => {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+    setSelectedPage(1);
   };
 
   const previousPage = () => {
-    changePage(-1);
+    setSelectedPage(selectedPage - 1);
   };
 
   const nextPage = () => {
-    changePage(1);
+    setSelectedPage(selectedPage + 1);
   };
 
   const onCanvasLoadSuccess = () => {
@@ -68,7 +63,7 @@ const PdfViewerComponent = () => {
     <ButtonGroup bottom={2} pos="absolute" variant="outline" spacing="6">
       <Button
         size="sm"
-        isDisabled={pageNumber == 1}
+        isDisabled={selectedPage == 1}
         boxShadow="dark-sm"
         bg="gray.100"
         onClick={previousPage}
@@ -77,7 +72,7 @@ const PdfViewerComponent = () => {
       </Button>
       <Button
         size="sm"
-        isDisabled={pageNumber == numPages}
+        isDisabled={selectedPage == numPages}
         boxShadow="dark-sm"
         bg="gray.100"
         onClick={nextPage}
@@ -101,7 +96,7 @@ const PdfViewerComponent = () => {
               onLoadSuccess={onCanvasLoadSuccess}
               inputRef={canvasDiv}
               canvasRef={canvas}
-              pageNumber={pageNumber}
+              pageNumber={selectedPage}
             />
             {renderButtonGroup()}
           </Document>

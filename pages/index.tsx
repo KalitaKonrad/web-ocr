@@ -10,6 +10,7 @@ import { useState } from "react";
 
 const Home: React.FC = () => {
   const [file, setFile] = useState<File>(null);
+  const [selectedPage, setSelectedPage] = useState<number>(0);
 
   const renderLeftSide = () => (
     <SideContainer hasRightBorder>
@@ -27,7 +28,9 @@ const Home: React.FC = () => {
   const renderMainContent = () => <MainWrapper />;
 
   return (
-    <AppContext.Provider value={{ file, setFile }}>
+    <AppContext.Provider
+      value={{ file, setFile, selectedPage, setSelectedPage }}
+    >
       <Flex h="100%" justifyContent="space-between">
         {renderLeftSide()}
         <Flex direction={"column"} h="100%" w="70%">
