@@ -1,19 +1,26 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Box, Textarea } from "@chakra-ui/react";
+import { useStore } from "../../store/useStore";
+import { AppContext } from "../../appContext/appContext";
 
-interface TextAreaProps {
-  detectedText: string;
-}
+const TextAreaComponent: React.FC = () => {
+  const detectionEditsArray = useStore((state) => state.detectionEditsArray);
+  const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
 
-const TextAreaComponent: React.FC<TextAreaProps> = ({ detectedText }) => {
-  const [textAreaValue, setTextAreaValue] = useState(detectedText);
+  const { selectedPage } = useContext(AppContext);
+  const [textAreaValue, setTextAreaValue] = useState(
+    detectionEditsArray[selectedPage],
+  );
 
   useEffect(() => {
-    setTextAreaValue(detectedText);
-  }, [detectedText]);
+    setTextAreaValue(detectionEditsArray[selectedPage]);
+    console.log("=======>: ", detectionEditsArray[selectedPage]);
+  }, [selectedPage, detectionEditsArray]);
 
   const handleChange = (event) => {
-    setTextAreaValue(event.target.value);
+    // setTextAreaValue(event.target.value);
+    changeDetectionEdit(selectedPage, event.target.value);
+    console.log(event.target.value);
   };
 
   return (
@@ -25,7 +32,7 @@ const TextAreaComponent: React.FC<TextAreaProps> = ({ detectedText }) => {
         resize="none"
         size="lg"
         variant="outline"
-        isDisabled={detectedText === ""}
+        isDisabled={detectionEditsArray[selectedPage] === ""}
         value={textAreaValue}
         onChange={handleChange}
       />

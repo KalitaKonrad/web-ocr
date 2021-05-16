@@ -18,18 +18,15 @@ import { useStore } from "src/store/useStore";
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
-  setDetectedText(text): void;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
-  setDetectedText,
 }) => {
   const { file, setFile, selectedPage } = useContext(AppContext);
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
   const [selectedFile, setSelectedFile] = useState<File>(null);
-  const detectionEditsArray = useStore((state) => state.detectionEditsArray);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
 
   useEffect(() => {
@@ -43,7 +40,10 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
       return;
     }
     if (isSuccess) {
-      setDetectedText(data[selectedPage - 1]?.fullTextAnnotation.text);
+      changeDetectionEdit(
+        selectedPage,
+        data[selectedPage - 1]?.fullTextAnnotation.text,
+      );
     }
   }, [selectedPage, data]);
 
@@ -67,16 +67,19 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     });
   };
 
-  // const assignDataToStore = () => {
-  //   for (let i = 0; i < data?.length; )
-  // };
+  const assignDataToStore = () => {
+    for (let i = 0; i < data?.length; i++) {
+      changeDetectionEdit(i, data[i].fullTextAnnotation.text);
+    }
+  };
 
   const onSave = () => {
     setFile(selectedFile);
-    setDetectedText("");
+    // setDetectedText("");
     uploadLocalPdf(selectedFile);
-
+    assignDataToStore();
     onClose();
+    console.log("HOHOHOHOHOOHOHOHOHOOHOH ++++++=");
   };
 
   return (
