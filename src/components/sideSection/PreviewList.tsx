@@ -25,9 +25,11 @@ const PreviewList: React.FC<PreviewListProps> = () => {
   };
 
   const generatePages = () => {
-    const pageNumbers: Array<number> = [];
-    for (let i = 1; i <= numPages; ++i) pageNumbers.push(i);
-    return pageNumbers.map((pageNum) => <SiteThumbnail pageNumber={pageNum} />);
+    const pageNumbers: Array<JSX.Element> = [];
+    for (let i = 1; i <= numPages; i++) {
+      pageNumbers.push(<SiteThumbnail key={i} pageNumber={i} />);
+    }
+    return pageNumbers;
   };
 
   return (

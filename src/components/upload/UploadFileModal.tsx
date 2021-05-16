@@ -13,6 +13,7 @@ import { useDetectionQuery } from "../../services/useDetectionQuery";
 import FileInput from "./FileInput";
 import { AppContext } from "src/appContext/appContext";
 import axios from "axios";
+import { useStore } from "src/store/useStore";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -28,6 +29,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const { file, setFile, selectedPage } = useContext(AppContext);
   const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
   const [selectedFile, setSelectedFile] = useState<File>(null);
+  const detectionEditsArray = useStore((state) => state.detectionEditsArray);
+  const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
 
   useEffect(() => {
     if (file?.name) {
@@ -46,11 +49,6 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
-      <Text fontSize="sm">
-        Twój plik powinien być zapisany w Cloud Storage w zasobniku
-        web-ocr-storage. Przykładowa nazwa pliku "lorem-ipsum.pdf".
-      </Text>
-
       {<FileInput setFile={setSelectedFile} file={selectedFile} />}
     </ModalBody>
   );
@@ -60,7 +58,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const uploadLocalPdf = async (localFile) => {
-    var formData = new FormData();
+    const formData = new FormData();
     formData.append("file", localFile);
     axios.post("/api/upload", formData, {
       headers: {
@@ -69,10 +67,15 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     });
   };
 
+  // const assignDataToStore = () => {
+  //   for (let i = 0; i < data?.length; )
+  // };
+
   const onSave = () => {
     setFile(selectedFile);
     setDetectedText("");
     uploadLocalPdf(selectedFile);
+
     onClose();
   };
 
@@ -80,7 +83,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Podaj nazwę pliku</ModalHeader>
+        <ModalHeader>Prześlij plik</ModalHeader>
         {renderModalBody()}
         <ModalFooter>
           <Button backgroundColor="red.200" mr={3} onClick={onSave}>
