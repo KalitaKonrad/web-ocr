@@ -26,17 +26,13 @@ const PreviewList: React.FC<PreviewListProps> = () => {
 
   const generatePages = () => {
     const pageNumbers: Array<number> = [];
-    for (let i = 0; i < numPages; ++i) pageNumbers.push(i + 1);
-    console.log(pageNumbers);
-    return pageNumbers.map((pageNum) => (
-      <>
-        <SiteThumbnail pageNumber={pageNum} />
-      </>
-    ));
+    for (let i = 1; i <= numPages; ++i) pageNumbers.push(i);
+    return pageNumbers.map((pageNum) => <SiteThumbnail pageNumber={pageNum} />);
   };
 
   return (
     <Flex
+      maxW={"90%"}
       flexDirection="column"
       alignItems="center"
       flex={1}
