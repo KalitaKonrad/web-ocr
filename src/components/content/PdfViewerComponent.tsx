@@ -1,40 +1,35 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { Box, Button, ButtonGroup, Flex, Text } from "@chakra-ui/react";
 import { Document, Page, pdfjs } from "react-pdf";
+import { AppContext } from "src/appContext/appContext";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const PDF_SCALE_FACTOR = 1.4;
+const PDF_SCALE_FACTOR = 1.41;
 
-const PdfViewerComponent = ({ file }) => {
+const PdfViewerComponent = () => {
   const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [width, setWidth] = useState(0);
   const [url, setUrl] = useState(null);
+  const { file, selectedPage, setSelectedPage } = useContext(AppContext);
 
   const canvas = useRef() as any;
   const documentDiv = useRef() as any;
   const canvasDiv = useRef() as any;
 
   const handleResize = () => {
-    setWidth(window.innerWidth);
     onCanvasLoadSuccess();
   };
 
   const onDocumentLoadSuccess = ({ numPages }) => {
     setNumPages(numPages);
-    setPageNumber(1);
-  };
-
-  const changePage = (offset) => {
-    setPageNumber((prevPageNumber) => prevPageNumber + offset);
+    setSelectedPage(1);
   };
 
   const previousPage = () => {
-    changePage(-1);
+    setSelectedPage(selectedPage - 1);
   };
 
   const nextPage = () => {
-    changePage(1);
+    setSelectedPage(selectedPage + 1);
   };
 
   const onCanvasLoadSuccess = () => {
@@ -46,10 +41,7 @@ const PdfViewerComponent = ({ file }) => {
     documentDiv["current"].style.width = "100%";
 
     const width = Math.min(
-      Math.floor(
-        documentDiv["current"].getBoundingClientRect().height /
-          PDF_SCALE_FACTOR,
-      ),
+      Math.floor((window.innerHeight * 0.8) / PDF_SCALE_FACTOR),
       documentDiv["current"].getBoundingClientRect().width,
     );
     canvasDiv["current"].style.width = `${width}px`;
@@ -60,7 +52,6 @@ const PdfViewerComponent = ({ file }) => {
   };
 
   useEffect(() => {
-    setWidth(window.innerWidth);
     if (file) {
       setUrl(URL.createObjectURL(file));
     }
@@ -68,17 +59,11 @@ const PdfViewerComponent = ({ file }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, [file]);
 
-  useEffect(() => {
-    setWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const renderButtonGroup = () => (
     <ButtonGroup bottom={2} pos="absolute" variant="outline" spacing="6">
       <Button
         size="sm"
-        isDisabled={pageNumber == 1}
+        isDisabled={selectedPage == 1}
         boxShadow="dark-sm"
         bg="gray.100"
         onClick={previousPage}
@@ -87,7 +72,7 @@ const PdfViewerComponent = ({ file }) => {
       </Button>
       <Button
         size="sm"
-        isDisabled={pageNumber == numPages}
+        isDisabled={selectedPage == numPages}
         boxShadow="dark-sm"
         bg="gray.100"
         onClick={nextPage}
@@ -98,9 +83,9 @@ const PdfViewerComponent = ({ file }) => {
   );
 
   return (
-    <Box h="100%">
+    <Box maxh="100%" h="100%">
       {file ? (
-        <Box h="100%" position="relative">
+        <Box h="100%" maxh="100%" position="relative">
           <Document
             inputRef={documentDiv}
             file={url}
@@ -111,7 +96,7 @@ const PdfViewerComponent = ({ file }) => {
               onLoadSuccess={onCanvasLoadSuccess}
               inputRef={canvasDiv}
               canvasRef={canvas}
-              pageNumber={pageNumber}
+              pageNumber={selectedPage}
             />
             {renderButtonGroup()}
           </Document>
