@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Modal,
@@ -7,9 +7,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
 } from "@chakra-ui/react";
-import { useDetectionQuery } from "../../services/useDetectionQuery";
 import FileInput from "./FileInput";
 import { AppContext } from "src/appContext/appContext";
 import axios from "axios";
@@ -25,32 +23,10 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   isOpen,
 }) => {
   const { file, setFile, selectedPage } = useContext(AppContext);
-  const { error, data, isSuccess, refetch } = useDetectionQuery(file?.name);
-  const [selectedFile, setSelectedFile] = useState<File>(null);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
 
-  useEffect(() => {
-    if (file?.name) {
-      refetch();
-    }
-  }, [file]);
-
-  useEffect(() => {
-    if (error) {
-      return;
-    }
-    if (isSuccess) {
-      changeDetectionEdit(
-        selectedPage,
-        data[selectedPage - 1]?.fullTextAnnotation.text,
-      );
-    }
-  }, [selectedPage, data]);
-
   const renderModalBody = () => (
-    <ModalBody pb={6}>
-      {<FileInput setFile={setSelectedFile} file={selectedFile} />}
-    </ModalBody>
+    <ModalBody pb={6}>{<FileInput setFile={setFile} file={file} />}</ModalBody>
   );
 
   const onCloseModal = () => {
@@ -60,26 +36,27 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const uploadLocalPdf = async (localFile) => {
     const formData = new FormData();
     formData.append("file", localFile);
-    axios.post("/api/upload", formData, {
+    return axios.post("/api/upload", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
   };
 
-  const assignDataToStore = () => {
+  const assignDataToStore = (data) => {
     for (let i = 0; i < data?.length; i++) {
-      changeDetectionEdit(i, data[i].fullTextAnnotation.text);
+      changeDetectionEdit(i + 1, data[i].fullTextAnnotation.text);
     }
   };
 
-  const onSave = () => {
-    setFile(selectedFile);
+  const onSave = async () => {
     // setDetectedText("");
-    uploadLocalPdf(selectedFile);
-    assignDataToStore();
+    await uploadLocalPdf(file);
+    const { data } = await axios.get(
+      `http://localhost:3000/api/getOcr/${file?.name}`,
+    );
+    assignDataToStore(data);
     onClose();
-    console.log("HOHOHOHOHOOHOHOHOHOOHOH ++++++=");
   };
 
   return (

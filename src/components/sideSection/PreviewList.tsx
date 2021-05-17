@@ -1,8 +1,9 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Flex, Spacer } from "@chakra-ui/react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import { Flex } from "@chakra-ui/react";
 import SiteThumbnail from "@components/sideSection/SiteThumbnail";
 import { AppContext } from "src/appContext/appContext";
 import { Document, pdfjs } from "react-pdf";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 interface PreviewListProps {
@@ -24,17 +25,21 @@ const PreviewList: React.FC<PreviewListProps> = () => {
     setNumPages(numPages);
   };
 
-  const generatePages = () => {
-    const pageNumbers: Array<JSX.Element> = [];
-    for (let i = 1; i <= numPages; i++) {
-      pageNumbers.push(<SiteThumbnail key={i} pageNumber={i} />);
-    }
-    return pageNumbers;
-  };
+  const generatePages = useMemo(
+    () =>
+      file
+        ? new Array(numPages)
+            .fill(0)
+            .map((_, index) => (
+              <SiteThumbnail key={index + 1} pageNumber={index + 1} />
+            ))
+        : null,
+    [numPages, file],
+  );
 
   return (
     <Flex
-      maxW={"90%"}
+      maxW="90%"
       flexDirection="column"
       alignItems="center"
       flex={1}
@@ -46,7 +51,7 @@ const PreviewList: React.FC<PreviewListProps> = () => {
       }}
     >
       <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
-        {generatePages()}
+        {generatePages}
       </Document>
     </Flex>
   );
