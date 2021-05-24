@@ -7,6 +7,7 @@ import PreviewList from "@components/sideSection/PreviewList";
 import MainWrapper from "@components/content/MainWrapper";
 import { AppContext } from "../src/appContext/appContext";
 import { useState } from "react";
+import PropertiesComponent from "@components/sideSection/PropertiesComponent";
 
 const Home: React.FC = () => {
   const [file, setFile] = useState<File>(null);
@@ -22,6 +23,7 @@ const Home: React.FC = () => {
   const renderRightSide = () => (
     <SideContainer hasLeftBorder>
       <SideTitleComponent title="Właściwości" />
+      <PropertiesComponent />
     </SideContainer>
   );
 
