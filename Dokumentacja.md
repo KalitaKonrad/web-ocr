@@ -18,6 +18,7 @@
   * [Struktura aplikacji](#struktura-aplikacji)
   * [Opis poszczególnych komponentów](#opis-poszczególnych-komponentów)
 * [Wymagania niefunkcjonalne](#wymagania-niefunkcjonalne)
+* [Interakcja użytkownika](#interakcja-użytkownika)
 
 ## Założenia projektu
 
@@ -111,22 +112,11 @@ Do stylowania każdego z powyższych komponentów została użyta ChakraUI. Do d
 * poprawne działanie Api Cloud Storage
 * termin ukończenia aplikacji na 16 czerwca 2021
 
+## Interakcja użytkownika
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyżej. W skrócie jest to panel boczny z miniaturkowym podglądem kilku stron na raz PDFa, w centrum ekranu ma dwa pola tekstowe - po lewym obecna strona na, której się znajduje a po prawej wynik OCR z pliku, który wyśle do analizy. Na dole ekranu znajduje się przycisk z napisem "Dodaj pliki". 
+1. Pierwszym krokiem do rozpoczęcia interakcji ze stroną jest jego naciśnięcie.
+2. Wyświetlone zostanie okno, gdzie możemy przeciągnąć interesujący nas plik PDF lub możemy wybrać go z kolejnego okna, które pojawi się po kliknięciu w obrębie pola okna. Plik PDF musi znajdować się u nas lokalnie na komputerze. Warto tutaj dodać, że format PDF jest jedynym akceptowalnym formatem przesyłanego pliku - jeśli wybrany plik będzie miał inny format to nie zostanie on zaakceptowany i stosowna informacja zostanie wyświetlona użytkownikowi.
+3. Po dodaniu pliku zatwierdzamy przyciskiem "Wyślij" - czekamy aż plik zostanie zapisany w Google Cloud Storage i zostanie wykonana na nim operacja OCR. Gdy to się wykona - zamykane jest okno dodawania pliku i widzimy rezultat. 
+4. W centrum ekranu po prawej stronie mamy wynik operacji OCR, który możemy swobodnie edytować. Używając lewego panelu możemy poruszać się po PDFie i podglądać inne strony. Każda ze stron, która aktualnie mamy zaznaczoną widzimy w centrum okna przeglądarki po lewej stronie w powiększeniu. 
+ 
