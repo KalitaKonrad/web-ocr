@@ -6,7 +6,7 @@ interface SidePropertyValueProps {
 }
 
 const SidePropertyValue: React.FC<SidePropertyValueProps> = ({ text }) => (
-  <Text align="center" marginBottom={4}>
+  <Text align="center" marginBottom={3}>
     {text}
   </Text>
 );
