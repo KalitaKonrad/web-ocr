@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       uri: gcsDestinationUri,
     },
   };
-  const features = [{ type: "DOCUMENT_TEXT_DETECTION" }];
+  const features = [{ type: "TEXT_DETECTION" }];
   const request = {
     requests: [
       {
@@ -44,5 +44,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // sample.
   const responses = result.responses[0].responses;
   console.log("HEHEE : ", responses);
+  // console.log(
+  //   "HEHEE : ",
+  //   responses[0].fullTextAnnotation.pages[0].blocks[0].paragraphs[0],
+  //   responses[0].fullTextAnnotation.pages[0].blocks[0].boundingBox[0],
+  // );
   res.json(responses);
 };
