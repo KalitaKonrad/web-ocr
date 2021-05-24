@@ -13,7 +13,7 @@ type NextApiRequestWithFormData = NextApiRequest & {
 
 type BlobCorrected = Blob & {
   buffer: Buffer;
-  originalname: String;
+  originalname: string;
 };
 
 export const config = {

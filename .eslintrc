@@ -4,7 +4,7 @@
   "plugins": ["@typescript-eslint"],
   "overrides": [
     {
-      "files": ["*.js"],
+      "files": ["*.js", "*.jsx", "*.tsx", "*.ts"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }

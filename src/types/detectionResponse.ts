@@ -1,8 +1,4 @@
-export interface DetectionResponse {
-  data: Data[];
-}
-
-interface Data {
+export interface DetectionResponseRecord {
   fullTextAnnotation: {
     text: string;
   };
