@@ -118,5 +118,7 @@ Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyże
 1. Pierwszym krokiem do rozpoczęcia interakcji ze stroną jest jego naciśnięcie.
 2. Wyświetlone zostanie okno, gdzie możemy przeciągnąć interesujący nas plik PDF lub możemy wybrać go z kolejnego okna, które pojawi się po kliknięciu w obrębie pola okna. Plik PDF musi znajdować się u nas lokalnie na komputerze. Warto tutaj dodać, że format PDF jest jedynym akceptowalnym formatem przesyłanego pliku - jeśli wybrany plik będzie miał inny format to nie zostanie on zaakceptowany i stosowna informacja zostanie wyświetlona użytkownikowi.
 3. Po dodaniu pliku zatwierdzamy przyciskiem "Wyślij" - czekamy aż plik zostanie zapisany w Google Cloud Storage i zostanie wykonana na nim operacja OCR. Gdy to się wykona - zamykane jest okno dodawania pliku i widzimy rezultat. 
-4. W centrum ekranu po prawej stronie mamy wynik operacji OCR, który możemy swobodnie edytować. Używając lewego panelu możemy poruszać się po PDFie i podglądać inne strony. Każda ze stron, która aktualnie mamy zaznaczoną widzimy w centrum okna przeglądarki po lewej stronie w powiększeniu. 
+4. W centrum ekranu po prawej stronie mamy wynik operacji OCR, który możemy swobodnie edytować. Edycja zostanie zachowana aż do zmiany pliku.
+5.  Używając lewego panelu możemy poruszać się po PDFie i podglądać inne strony. Każda ze stron, która aktualnie mamy zaznaczoną widzimy w centrum okna przeglądarki po lewej stronie w powiększeniu. 
+6. W prawym panelu możemy podglądnąć właściwości pliku
  
