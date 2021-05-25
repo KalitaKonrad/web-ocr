@@ -9,7 +9,6 @@ import Alert from "@components/shared/Alert";
 
 const MainWrapper: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [detectedText, setDetectedText] = useState("");
   const [isAlertOpen, setIsAlertOpen] = React.useState(false);
 
   return (
@@ -19,13 +18,11 @@ const MainWrapper: React.FC = () => {
           <PdfViewerComponent />
         </ContentContainer>
         <ContentContainer>
-          <TextAreaComponent detectedText={detectedText} />
+          <TextAreaComponent />
         </ContentContainer>
       </Flex>
       <UploadButton {...{ onOpen }} />
-      <UploadFileModal
-        {...{ isOpen, onClose, setDetectedText, setIsAlertOpen }}
-      />
+      <UploadFileModal {...{ isOpen, onClose, setIsAlertOpen }} />
       {isAlertOpen && (
         <Alert isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} />
       )}

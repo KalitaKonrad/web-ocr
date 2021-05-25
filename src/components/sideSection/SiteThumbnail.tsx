@@ -1,5 +1,5 @@
-import React, { useContext, useRef, useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
+import React, { useContext } from "react";
+import { Box } from "@chakra-ui/react";
 import { Page } from "react-pdf";
 import { AppContext } from "src/appContext/appContext";
 
