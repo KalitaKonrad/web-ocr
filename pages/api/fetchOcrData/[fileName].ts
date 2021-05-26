@@ -7,50 +7,27 @@ const bucket = storage.bucket(bucketName);
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { fileName } = req.query;
-  // res.json(fileName);
 
-  if (typeof fileName === "string") {
-    const [files] = await bucket.getFiles({
-      directory: `${outputPrefix}/${fileName}/`,
-    });
+  const [files] = await bucket.getFiles({
+    directory: `${outputPrefix}/${fileName}/`,
+  });
 
-    const output = [];
-    const fs = require("fs");
+  const readOperations = files.map((file) => {
+    const archivo = file.createReadStream();
 
-    console.log("files", files);
-    files.forEach((file) => {
-      const archivo = file.createReadStream();
+    return new Promise((resolve) => {
       let buf = "";
       archivo
         .on("data", function (d) {
           buf += d;
         })
-        .on("end", function () {
-          console.log(buf);
-          output.push(buf);
-          console.log("End");
+        .on("end", () => {
+          resolve(buf);
         });
     });
+  });
+  const filesOutput = await Promise.all(readOperations);
 
-    res.json(output);
-    res.end();
-    return;
-  }
-
-  // files.forEach((file) => {
-  //   console.log("Reading: " + file.name);
-  //   const archivo = file.createReadStream();
-  //   console.log("Concat Data");
-  //   let buf = "";
-  //   archivo
-  //     .on("data", function (d) {
-  //       buf += d;
-  //     })
-  //     .on("end", function () {
-  //       console.log(buf);
-  //       console.log("End");
-  //     });
-  // });
-
-  res.json("error");
+  res.json(filesOutput);
+  res.end();
 };
