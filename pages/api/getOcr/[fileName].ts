@@ -1,19 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
+export const outputPrefix = "outputs";
+export const bucketName = "web-ocr-storage";
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const vision = require("@google-cloud/vision").v1;
 
   // Creates a client
   const client = new vision.ImageAnnotatorClient();
   // Bucket where the file resides
-  const bucketName = "web-ocr-storage";
   // Path to PDF file within bucket
   const { fileName } = req.query;
   // The folder to store the results
-  const outputPrefix = "outputs";
+  let fileNameWithoutExtension = "";
+  if (typeof fileName === "string") {
+    fileNameWithoutExtension = fileName.split(".")[0];
+  }
 
   const gcsSourceUri = `gs://${bucketName}/${fileName}`;
-  const gcsDestinationUri = `gs://${bucketName}/${outputPrefix}/`;
+  const gcsDestinationUri = `gs://${bucketName}/${outputPrefix}/${fileNameWithoutExtension}/`;
 
   const inputConfig = {
     // Supported mime_types are: 'application/pdf' and 'image/tiff'
@@ -38,11 +43,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     ],
   };
 
-  const [result] = await client.batchAnnotateFiles(request);
+  const [operation] = await client.asyncBatchAnnotateFiles(request);
+  const [filesResponse] = await operation.promise();
+  console.log("operation", operation);
 
   // Process the results, just get the first result, since only one file was sent in this
   // sample.
-  const responses = result.responses[0].responses;
-  console.log("HEHEE : ", responses);
-  res.json(responses);
+  // const destinationUri =
+  //   filesResponse.responses[0].outputConfig.gcsDestination.uri;
+
+  const destinationUri =
+    filesResponse.responses[0].outputConfig.gcsDestination.uri;
+  res.json(operation);
 };

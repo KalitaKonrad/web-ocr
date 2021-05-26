@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Modal,
@@ -24,6 +24,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 }) => {
   const { file, setFile, selectedPage } = useContext(AppContext);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
+  const [loading, setLoading] = useState(false);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>{<FileInput setFile={setFile} file={file} />}</ModalBody>
@@ -51,11 +52,14 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
   const onSave = async () => {
     // setDetectedText("");
+    setLoading(true);
     await uploadLocalPdf(file);
     const { data } = await axios.get(
       `http://localhost:3000/api/getOcr/${file?.name}`,
     );
-    assignDataToStore(data);
+    // assignDataToStore(data);
+    console.log("data", data);
+    setLoading(false);
     onClose();
   };
 
@@ -66,10 +70,17 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
         <ModalHeader>Prześlij plik</ModalHeader>
         {renderModalBody()}
         <ModalFooter>
-          <Button backgroundColor="red.200" mr={3} onClick={onSave}>
-            Save
+          <Button
+            backgroundColor="red.200"
+            mr={3}
+            onClick={onSave}
+            isLoading={loading}
+          >
+            Wyślij
           </Button>
-          <Button onClick={onCloseModal}>Cancel</Button>
+          <Button onClick={onCloseModal} disabled={loading}>
+            Anuluj
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
