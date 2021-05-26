@@ -58,7 +58,6 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     const { data } = await axios.get(
       `http://localhost:3000/api/getOcr/${file?.name}`,
     );
-    console.log("POPOPOPOP: ", data);
     assignDataToStore(data);
     onClose();
   };
