@@ -43,6 +43,5 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Process the results, just get the first result, since only one file was sent in this
   // sample.
   const responses = result.responses[0].responses;
-  console.log("HEHEE : ", responses);
   res.json(responses);
 };
