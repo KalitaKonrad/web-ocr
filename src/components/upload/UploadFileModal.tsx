@@ -26,6 +26,9 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
   const setNumberOfPages = useStore((state) => state.setNumberOfPages);
   const setPagesData = useStore((state) => state.setPagesData);
+  const setIsDetectionLoading = useStore(
+    (state) => state.setIsDetectionLoading,
+  );
 
   const renderModalBody = () => (
     <ModalBody pb={6}>{<FileInput setFile={setFile} file={file} />}</ModalBody>
@@ -54,12 +57,14 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const onSave = async () => {
+    onClose();
+    setIsDetectionLoading(true);
     await uploadLocalPdf(file);
     const { data } = await axios.get(
       `http://localhost:3000/api/getOcr/${file?.name}`,
     );
     assignDataToStore(data);
-    onClose();
+    setIsDetectionLoading(false);
   };
 
   return (

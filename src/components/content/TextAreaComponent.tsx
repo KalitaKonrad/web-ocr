@@ -1,9 +1,11 @@
 import React, { useCallback, useContext } from "react";
-import { Box, Textarea } from "@chakra-ui/react";
+import { Box, Skeleton, Textarea } from "@chakra-ui/react";
 import { useStore } from "../../store/useStore";
 import { AppContext } from "../../appContext/appContext";
 
 const TextAreaComponent: React.FC = () => {
+  const isDetectionLoading = useStore((state) => state.isDetectionLoading);
+
   const detectionEditsArray = useStore(
     useCallback((state) => state.detectionEditsArray, []),
   );
@@ -19,6 +21,12 @@ const TextAreaComponent: React.FC = () => {
     changeDetectionEdit(selectedPage, event.target.value);
   };
 
+  if (isDetectionLoading)
+    return (
+      <Box flex={1}>
+        <Skeleton height="100%" />
+      </Box>
+    );
   return (
     <Box mt={5} flex={1}>
       <Textarea
