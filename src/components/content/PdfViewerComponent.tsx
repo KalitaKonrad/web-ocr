@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import { Box, Button, ButtonGroup, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Flex, Icon, Text } from "@chakra-ui/react";
+import { FaRegFilePdf } from "react-icons/fa";
 import { Document, Page, pdfjs } from "react-pdf";
 import { AppContext } from "src/appContext/appContext";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
@@ -83,7 +84,7 @@ const PdfViewerComponent = () => {
   );
 
   return (
-    <Box maxh="100%" h="100%">
+    <Flex maxh="100%" h="100%">
       {file ? (
         <Box h="100%" maxh="100%" position="relative">
           <Document
@@ -102,14 +103,22 @@ const PdfViewerComponent = () => {
           </Document>
         </Box>
       ) : (
-        <Flex alignItems="center" justifyContent="center" mt={7}>
+        <Flex
+          alignItems="center"
+          justifyContent="center"
+          mt={7}
+          flexDirection="column"
+        >
           <Text textAlign="center" mx={5}>
             Wybierz plik w formacje PDF ze swojego komputera. Aplikacja
             przeprowadzi automatyczną detekcję tekstu.
           </Text>
+          <Flex flex={1} alignItems="center" justifyContent="center">
+            <Icon boxSize="35%" color="red.300" as={FaRegFilePdf} />
+          </Flex>
         </Flex>
       )}
-    </Box>
+    </Flex>
   );
 };
 

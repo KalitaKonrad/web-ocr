@@ -8,9 +8,11 @@ interface EditsStore {
   setNumberOfPages: (pageNumber: number) => void;
   pagesData: PageObject[];
   setPagesData: (index: number, pageData: PageObject) => void;
+  isDetectionLoading: boolean;
+  setIsDetectionLoading: (value: boolean) => void;
 }
 
-const editHelper = (page, edit, state) => {
+const editHelper = (page: number, edit: string, state: EditsStore) => {
   const newEditArray = [...state.detectionEditsArray];
   newEditArray[page] = edit;
   return newEditArray;
@@ -19,7 +21,6 @@ const editHelper = (page, edit, state) => {
 const pageDataHelper = (index, pageData, state) => {
   const newPagesArray = [...state.pagesData];
   newPagesArray[index] = pageData;
-  console.log(newPagesArray);
   return newPagesArray;
 };
 
@@ -34,4 +35,6 @@ export const useStore = create<EditsStore>((set) => ({
     set((state) => ({
       pagesData: pageDataHelper(index, pageData, state),
     })),
+  isDetectionLoading: false,
+  setIsDetectionLoading: (value) => set(() => ({ isDetectionLoading: value })),
 }));
