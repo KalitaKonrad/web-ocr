@@ -13,12 +13,19 @@ const SiteThumbnail: React.FC<SiteThumbnailProps> = ({ pageNumber }) => {
   const classes = `${pageNumber === selectedPage ? "selected " : ""} page`;
 
   return (
-    <Box w="100%" padding="1em">
+    <Box
+      w="100%"
+      padding="1em"
+      display="flex"
+      justifyContent="center"
+      maxHeight={200}
+    >
       <Page
-        className={classes}
+        className={[classes, "page"]}
         onClick={() => setSelectedPage(pageNumber)}
         scale={0.2}
         renderTextLayer={false}
+        renderAnnotationLayer={false}
         pageNumber={pageNumber}
       />
     </Box>

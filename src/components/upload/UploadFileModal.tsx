@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Modal,
@@ -24,14 +24,17 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 }) => {
   const { file, setFile, setOcrCompleted } = useContext(AppContext);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
-  const setNumberOfPages = useStore((state) => state.setNumberOfPages);
-  const setPagesData = useStore((state) => state.setPagesData);
   const setIsDetectionLoading = useStore(
     (state) => state.setIsDetectionLoading,
   );
+  const detectionLoading = useStore((state) => state.isDetectionLoading);
+  const setNumberOfPages = useStore((state) => state.setNumberOfPages);
+  const setPagesData = useStore((state) => state.setPagesData);
 
   const renderModalBody = () => (
-    <ModalBody pb={6}>{<FileInput setFile={setFile} file={file} />}</ModalBody>
+    <ModalBody pb={6}>
+      {<FileInput setFile={setFile} file={file} loading={detectionLoading} />}
+    </ModalBody>
   );
 
   const onCloseModal = () => {
@@ -48,12 +51,27 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     });
   };
 
-  const assignDataToStore = (data) => {
-    for (let i = 0; i < data?.length; i++) {
-      changeDetectionEdit(i + 1, data[i].fullTextAnnotation.text);
-      setPagesData(i + 1, data[i].fullTextAnnotation.pages[0]);
+  const assignDataToStore = (output) => {
+    if (output.length === 0) {
+      return;
     }
-    setNumberOfPages(data.length);
+
+    // set state for each page
+    output.forEach((file) => {
+      const { responses } = JSON.parse(file);
+      responses.forEach(({ fullTextAnnotation, context }) => {
+        changeDetectionEdit(context.pageNumber, fullTextAnnotation.text);
+        setPagesData(context.pageNumber, fullTextAnnotation.pages[0]);
+      });
+    });
+
+    // compute total number of pages
+    const lastFile = output[output.length - 1];
+    const { responses } = JSON.parse(lastFile);
+    const totalNumberOfPages =
+      responses[responses.length - 1].context.pageNumber;
+
+    setNumberOfPages(totalNumberOfPages);
   };
 
   const onSave = async () => {
@@ -63,7 +81,16 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     const { data } = await axios.get(
       `http://localhost:3000/api/getOcr/${file?.name}`,
     );
-    assignDataToStore(data);
+
+    const isCompleted = data.latestResponse.done;
+
+    if (isCompleted) {
+      const { data } = await axios.get(
+        `http://localhost:3000/api/fetchOcrData/${file?.name}`,
+      );
+      assignDataToStore(data);
+    }
+
     setOcrCompleted(true);
     setIsDetectionLoading(false);
   };
@@ -80,10 +107,13 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
             mr={3}
             onClick={onSave}
             disabled={!file}
+            isLoading={detectionLoading}
           >
             Save
           </Button>
-          <Button onClick={onCloseModal}>Cancel</Button>
+          <Button onClick={onCloseModal} disabled={detectionLoading}>
+            Anuluj
+          </Button>
         </ModalFooter>
       </ModalContent>
     </Modal>

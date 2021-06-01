@@ -50,7 +50,11 @@ const PreviewList: React.FC<PreviewListProps> = () => {
         },
       }}
     >
-      <Document file={url} onLoadSuccess={onDocumentLoadSuccess}>
+      <Document
+        className="document-sidebar"
+        file={url}
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
         {generatePages}
       </Document>
     </Flex>

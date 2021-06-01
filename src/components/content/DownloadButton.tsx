@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Text } from "@chakra-ui/react";
 import MyPdfDocument from "@components/content/MyPdfDocument";
 import dynamic from "next/dynamic";
 import { AppContext } from "../../appContext/appContext";
@@ -45,14 +45,16 @@ const DownloadButton: React.FC = () => {
           onClick={() => setIsDocumentGenerated(false)}
           spinnerPlacement="start"
         >
-          <PDFDownloadLink
-            document={(<MyPdfDocument />) as any}
-            fileName={`${file?.name}.pdf`}
-          >
-            {({ loading }) =>
-              loading ? "ładowanie dokumentu..." : "Pobierz PDF!"
-            }
-          </PDFDownloadLink>
+          <Box flex={1}>
+            <PDFDownloadLink
+              document={(<MyPdfDocument />) as any}
+              fileName={`${file?.name}.pdf`}
+            >
+              {({ loading }) =>
+                loading ? "ładowanie dokumentu..." : <Text>Pobierz PDF</Text>
+              }
+            </PDFDownloadLink>
+          </Box>
         </Button>
       )}
     </Box>
