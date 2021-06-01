@@ -46,10 +46,13 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     });
   };
 
-  const assignDataToStore = (data) => {
-    for (let i = 0; i < data?.length; i++) {
-      changeDetectionEdit(i + 1, data[i].fullTextAnnotation.text);
-    }
+  const assignDataToStore = (output) => {
+    output.forEach((file) => {
+      const { responses } = JSON.parse(file);
+      responses.forEach(({ fullTextAnnotation }, index) =>
+        changeDetectionEdit(index + 1, fullTextAnnotation.text),
+      );
+    });
   };
 
   const onSave = async () => {
@@ -63,13 +66,12 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     const isCompleted = data.latestResponse.done;
 
     if (isCompleted) {
-      const output = await axios.get(
+      const { data } = await axios.get(
         `http://localhost:3000/api/fetchOcrData/${file?.name}`,
       );
-      console.log("output", output);
+      assignDataToStore(data);
     }
-    // assignDataToStore(data);
-    console.log("data", data);
+
     setLoading(false);
     onClose();
   };

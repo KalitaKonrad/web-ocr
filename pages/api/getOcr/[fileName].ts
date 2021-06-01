@@ -45,14 +45,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   const [operation] = await client.asyncBatchAnnotateFiles(request);
   const [filesResponse] = await operation.promise();
-  console.log("operation", operation);
 
-  // Process the results, just get the first result, since only one file was sent in this
-  // sample.
-  // const destinationUri =
-  //   filesResponse.responses[0].outputConfig.gcsDestination.uri;
-
-  const destinationUri =
-    filesResponse.responses[0].outputConfig.gcsDestination.uri;
   res.json(operation);
 };
