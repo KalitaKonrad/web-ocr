@@ -5,11 +5,12 @@ import { useDropzone } from "react-dropzone";
 interface FileInputProps {
   setFile: React.Dispatch<File>;
   file: File;
+  loading: boolean;
 }
 
 const MAX_FILE_SIZE = 5_242_880; // 5 MB
 
-const FileInput: React.FC<FileInputProps> = ({ setFile, file }) => {
+const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
   const [fileError, setFileError] = useState("");
 
   const onDrop = useCallback(([file]) => {
@@ -95,6 +96,7 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file }) => {
             cursor: "pointer",
           }}
           onClick={onFileRemove}
+          disabled={loading}
         >
           Plik: {file.name}
         </Button>

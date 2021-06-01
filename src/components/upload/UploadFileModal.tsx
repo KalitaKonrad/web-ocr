@@ -27,7 +27,9 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const [loading, setLoading] = useState(false);
 
   const renderModalBody = () => (
-    <ModalBody pb={6}>{<FileInput setFile={setFile} file={file} />}</ModalBody>
+    <ModalBody pb={6}>
+      {<FileInput setFile={setFile} file={file} loading={loading} />}
+    </ModalBody>
   );
 
   const onCloseModal = () => {
@@ -57,6 +59,15 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     const { data } = await axios.get(
       `http://localhost:3000/api/getOcr/${file?.name}`,
     );
+
+    const isCompleted = data.latestResponse.done;
+
+    if (isCompleted) {
+      const output = await axios.get(
+        `http://localhost:3000/api/fetchOcrData/${file?.name}`,
+      );
+      console.log("output", output);
+    }
     // assignDataToStore(data);
     console.log("data", data);
     setLoading(false);
