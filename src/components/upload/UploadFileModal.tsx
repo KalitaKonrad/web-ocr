@@ -93,7 +93,6 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
     setOcrCompleted(true);
     setIsDetectionLoading(false);
-    onClose();
   };
 
   return (
