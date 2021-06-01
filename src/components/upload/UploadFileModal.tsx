@@ -22,13 +22,16 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
 }) => {
-  const { file, setFile, selectedPage } = useContext(AppContext);
+  const { file, setFile, setOcrCompleted } = useContext(AppContext);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
-  const [loading, setLoading] = useState(false);
+  const setIsDetectionLoading = useStore(
+    (state) => state.setIsDetectionLoading,
+  );
+  const detectionLoading = useStore((state) => state.isDetectionLoading);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
-      {<FileInput setFile={setFile} file={file} loading={loading} />}
+      {<FileInput setFile={setFile} file={file} loading={detectionLoading} />}
     </ModalBody>
   );
 
@@ -56,8 +59,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const onSave = async () => {
-    // setDetectedText("");
-    setLoading(true);
+    onClose();
+    setIsDetectionLoading(true);
     await uploadLocalPdf(file);
     const { data } = await axios.get(
       `http://localhost:3000/api/getOcr/${file?.name}`,
@@ -72,7 +75,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
       assignDataToStore(data);
     }
 
-    setLoading(false);
+    setOcrCompleted(true);
+    setIsDetectionLoading(false);
     onClose();
   };
 
@@ -87,11 +91,12 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
             backgroundColor="red.200"
             mr={3}
             onClick={onSave}
-            isLoading={loading}
+            disabled={!file}
+            isLoading={detectionLoading}
           >
-            Wyślij
+            Save
           </Button>
-          <Button onClick={onCloseModal} disabled={loading}>
+          <Button onClick={onCloseModal} disabled={detectionLoading}>
             Anuluj
           </Button>
         </ModalFooter>
