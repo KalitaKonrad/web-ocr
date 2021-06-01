@@ -28,6 +28,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     (state) => state.setIsDetectionLoading,
   );
   const detectionLoading = useStore((state) => state.isDetectionLoading);
+  const setNumberOfPages = useStore((state) => state.setNumberOfPages);
+  const setPagesData = useStore((state) => state.setPagesData);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
@@ -50,12 +52,26 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   };
 
   const assignDataToStore = (output) => {
+    if (output.length === 0) {
+      return;
+    }
+
+    // set state for each page
     output.forEach((file) => {
       const { responses } = JSON.parse(file);
-      responses.forEach(({ fullTextAnnotation, context }) =>
-        changeDetectionEdit(context.pageNumber, fullTextAnnotation.text),
-      );
+      responses.forEach(({ fullTextAnnotation, context }) => {
+        changeDetectionEdit(context.pageNumber, fullTextAnnotation.text);
+        setPagesData(context.pageNumber, fullTextAnnotation.pages[0]);
+      });
     });
+
+    // compute total number of pages
+    const lastFile = output[output.length - 1];
+    const { responses } = JSON.parse(lastFile);
+    const totalNumberOfPages =
+      responses[responses.length - 1].context.pageNumber;
+
+    setNumberOfPages(totalNumberOfPages);
   };
 
   const onSave = async () => {
