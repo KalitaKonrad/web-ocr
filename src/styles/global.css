@@ -17,3 +17,11 @@ body {
   box-shadow: 0 5px 8px 0 rgba(255, 166, 0, 0.76);
   transition: box-shadow 500ms;
 }
+
+.document-sidebar {
+  width: 100%
+}
+
+.page {
+  width: 100%;
+}

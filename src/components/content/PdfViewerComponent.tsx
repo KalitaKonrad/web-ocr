@@ -85,7 +85,7 @@ const PdfViewerComponent = () => {
   return (
     <Box maxh="100%" h="100%">
       {file ? (
-        <Box h="100%" maxh="100%" position="relative">
+        <Box h="100%" maxH="100%" position="relative">
           <Document
             inputRef={documentDiv}
             file={url}
