@@ -49,8 +49,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const assignDataToStore = (output) => {
     output.forEach((file) => {
       const { responses } = JSON.parse(file);
-      responses.forEach(({ fullTextAnnotation }, index) =>
-        changeDetectionEdit(index + 1, fullTextAnnotation.text),
+      responses.forEach(({ fullTextAnnotation, context }) =>
+        changeDetectionEdit(context.pageNumber, fullTextAnnotation.text),
       );
     });
   };
