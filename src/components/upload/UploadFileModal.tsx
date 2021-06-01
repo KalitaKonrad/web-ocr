@@ -22,7 +22,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
 }) => {
-  const { file, setFile, selectedPage } = useContext(AppContext);
+  const { file, setFile, setOcrCompleted } = useContext(AppContext);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
   const setNumberOfPages = useStore((state) => state.setNumberOfPages);
   const setPagesData = useStore((state) => state.setPagesData);
@@ -64,6 +64,7 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
       `http://localhost:3000/api/getOcr/${file?.name}`,
     );
     assignDataToStore(data);
+    setOcrCompleted(true);
     setIsDetectionLoading(false);
   };
 
@@ -74,7 +75,12 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
         <ModalHeader>Prześlij plik</ModalHeader>
         {renderModalBody()}
         <ModalFooter>
-          <Button backgroundColor="red.200" mr={3} onClick={onSave}>
+          <Button
+            backgroundColor="red.200"
+            mr={3}
+            onClick={onSave}
+            disabled={!file}
+          >
             Save
           </Button>
           <Button onClick={onCloseModal}>Cancel</Button>

@@ -12,6 +12,7 @@ import PropertiesComponent from "@components/sideSection/PropertiesComponent";
 const Home: React.FC = () => {
   const [file, setFile] = useState<File>(null);
   const [selectedPage, setSelectedPage] = useState<number>(0);
+  const [ocrCompleted, setOcrCompleted] = useState(false);
 
   const renderLeftSide = () => (
     <SideContainer hasRightBorder>
@@ -31,7 +32,14 @@ const Home: React.FC = () => {
 
   return (
     <AppContext.Provider
-      value={{ file, setFile, selectedPage, setSelectedPage }}
+      value={{
+        file,
+        setFile,
+        selectedPage,
+        setSelectedPage,
+        ocrCompleted,
+        setOcrCompleted,
+      }}
     >
       <Flex h="100%" justifyContent="space-between">
         {renderLeftSide()}

@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { Button, Box, Text } from "@chakra-ui/react";
+import React, { useContext, useState } from "react";
+import { Box, Button } from "@chakra-ui/react";
 import MyPdfDocument from "@components/content/MyPdfDocument";
 import dynamic from "next/dynamic";
 import { AppContext } from "../../appContext/appContext";
@@ -13,12 +13,12 @@ const PDFDownloadLink = dynamic(
 
 const DownloadButton: React.FC = () => {
   const [isDocumentGenerated, setIsDocumentGenerated] = useState(false);
-  const { file } = useContext(AppContext);
+  const { file, ocrCompleted } = useContext(AppContext);
 
   return (
     <Box
       marginBottom={4}
-      display={"flex"}
+      display="flex"
       justifyContent="center"
       alignItems="center"
     >
@@ -31,6 +31,7 @@ const DownloadButton: React.FC = () => {
           borderRadius={24}
           onClick={() => setIsDocumentGenerated(true)}
           spinnerPlacement="start"
+          disabled={!ocrCompleted}
         >
           Wygeneruj link do pobrania
         </Button>
@@ -46,7 +47,7 @@ const DownloadButton: React.FC = () => {
         >
           <PDFDownloadLink
             document={(<MyPdfDocument />) as any}
-            fileName={file?.name ? `${file.name}.pdf` : "example.pdf"}
+            fileName={`${file?.name}.pdf`}
           >
             {({ loading }) =>
               loading ? "ładowanie dokumentu..." : "Pobierz PDF!"
