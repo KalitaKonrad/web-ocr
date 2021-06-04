@@ -6,14 +6,25 @@ interface FileInputProps {
   setFile: React.Dispatch<File>;
   file: File;
   loading: boolean;
+  setIsAlertOpen(arg): void;
 }
 
 const MAX_FILE_SIZE = 5_242_880; // 5 MB
 
-const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
+const FileInput: React.FC<FileInputProps> = ({
+  setFile,
+  file,
+  loading,
+  setIsAlertOpen,
+}) => {
   const [fileError, setFileError] = useState("");
 
   const onDrop = useCallback(([file]) => {
+    if (!file) {
+      setIsAlertOpen(true);
+      return;
+    }
+
     if (file?.size > MAX_FILE_SIZE) {
       setFileError(
         `Za duży plik, musi ważyć poniżej ${Math.floor(
@@ -22,6 +33,8 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
       );
       return;
     }
+
+    console.log("HEHEHE: ==> ", file);
 
     setFile(file);
     setFileError("");

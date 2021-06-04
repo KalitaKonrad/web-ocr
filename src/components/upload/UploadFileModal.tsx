@@ -16,11 +16,13 @@ import { useStore } from "src/store/useStore";
 interface UploadFileModalProps {
   isOpen: boolean;
   onClose(): void;
+  setIsAlertOpen(arg): void;
 }
 
 const UploadFileModal: React.FC<UploadFileModalProps> = ({
   onClose,
   isOpen,
+  setIsAlertOpen,
 }) => {
   const { file, setFile, setOcrCompleted } = useContext(AppContext);
   const changeDetectionEdit = useStore((state) => state.changeDetectionEdit);
@@ -33,7 +35,14 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
-      {<FileInput setFile={setFile} file={file} loading={detectionLoading} />}
+      {
+        <FileInput
+          setFile={setFile}
+          file={file}
+          loading={detectionLoading}
+          setIsAlertOpen={setIsAlertOpen}
+        />
+      }
     </ModalBody>
   );
 
