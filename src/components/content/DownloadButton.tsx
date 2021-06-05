@@ -61,4 +61,4 @@ const DownloadButton: React.FC = () => {
   );
 };
 
-export default DownloadButton;
+export default React.memo(DownloadButton);

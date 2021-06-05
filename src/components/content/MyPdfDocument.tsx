@@ -35,4 +35,4 @@ const MyPdfDocument: React.FC = () => {
   );
 };
 
-export default MyPdfDocument;
+export default React.memo(MyPdfDocument);
