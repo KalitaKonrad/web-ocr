@@ -32,10 +32,7 @@ const MainWrapper: React.FC = () => {
         <UploadButton {...{ onOpen }} />
         <DownloadButton />
       </Flex>
-      <UploadFileModal {...{ isOpen, onClose, setIsAlertOpen }} />
-      {isAlertOpen && (
-        <Alert isAlertOpen={isAlertOpen} setIsAlertOpen={setIsAlertOpen} />
-      )}
+      <UploadFileModal {...{ isOpen, onClose }} />
     </Box>
   );
 };

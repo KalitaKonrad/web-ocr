@@ -39,7 +39,7 @@ const Alert: React.FC<AlertProps> = ({
           <AlertDialogBody>
             {message
               ? message
-              : "Spróbuj ponownie. Upewnij się, że plik jest dodany do Cloud Storage"}
+              : "Spróbuj ponownie. Upewnij się że dodajesz plik PDF"}
           </AlertDialogBody>
 
           <AlertDialogFooter>

@@ -12,6 +12,7 @@ import FileInput from "./FileInput";
 import { AppContext } from "src/appContext/appContext";
 import axios from "axios";
 import { useStore } from "src/store/useStore";
+import Alert from "@components/shared/Alert";
 
 interface UploadFileModalProps {
   isOpen: boolean;
@@ -30,6 +31,8 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
   const detectionLoading = useStore((state) => state.isDetectionLoading);
   const setNumberOfPages = useStore((state) => state.setNumberOfPages);
   const setPagesData = useStore((state) => state.setPagesData);
+
+  const [isDetectionError, setIsDetectionError] = useState(false);
 
   const renderModalBody = () => (
     <ModalBody pb={6}>
@@ -78,22 +81,37 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     onClose();
     setIsDetectionLoading(true);
     await uploadLocalPdf(file);
-    const { data } = await axios.get(
-      `http://localhost:3000/api/getOcr/${file?.name}`,
-    );
-
-    const isCompleted = data.latestResponse.done;
-
-    if (isCompleted) {
+    try {
       const { data } = await axios.get(
-        `http://localhost:3000/api/fetchOcrData/${file?.name}`,
+        `http://localhost:3000/api/getOcr/${file?.name}`,
       );
-      assignDataToStore(data);
-    }
 
-    setOcrCompleted(true);
-    setIsDetectionLoading(false);
+      const isCompleted = data.latestResponse.done;
+
+      if (isCompleted) {
+        const { data } = await axios.get(
+          `http://localhost:3000/api/fetchOcrData/${file?.name}`,
+        );
+        assignDataToStore(data);
+      }
+
+      setOcrCompleted(true);
+      setIsDetectionLoading(false);
+    } catch (error) {
+      setIsDetectionError(true);
+      setIsDetectionLoading(false);
+    }
   };
+
+  if (isDetectionError) {
+    return (
+      <Alert
+        message={"Błąd detekcji, spróbuj ponownie"}
+        isAlertOpen={isDetectionError}
+        setIsAlertOpen={setIsDetectionError}
+      />
+    );
+  }
 
   return (
     <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>

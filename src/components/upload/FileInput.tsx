@@ -1,6 +1,7 @@
 import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import Alert from "@components/shared/Alert";
 
 interface FileInputProps {
   setFile: React.Dispatch<File>;
@@ -12,8 +13,14 @@ const MAX_FILE_SIZE = 5_242_880; // 5 MB
 
 const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
   const [fileError, setFileError] = useState("");
+  const [isExtensionError, setIsExtensionError] = useState(false);
 
   const onDrop = useCallback(([file]) => {
+    if (!file) {
+      setIsExtensionError(true);
+      return;
+    }
+
     if (file?.size > MAX_FILE_SIZE) {
       setFileError(
         `Za duży plik, musi ważyć poniżej ${Math.floor(
@@ -22,6 +29,8 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
       );
       return;
     }
+
+    console.log("HEHEHE: ==> ", file);
 
     setFile(file);
     setFileError("");
@@ -104,6 +113,14 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
     </Flex>
   );
 
+  if (isExtensionError) {
+    return (
+      <Alert
+        isAlertOpen={isExtensionError}
+        setIsAlertOpen={setIsExtensionError}
+      />
+    );
+  }
   return (
     <Box height={200}>
       <form
