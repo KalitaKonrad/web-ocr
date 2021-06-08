@@ -49,6 +49,7 @@ W projekcie użyta będzie licencja GPL3.0 License
 * Przesyłanie plików z własnego urządzenia poprzez interakcje użytkownika z wyświetlanym modalem
 * Przesyłanie plików z własnego urządzenia na zasobnik cloud storage
 * Wysyłanie zapytań i otrzymywanie odpowiedzi z Google Vision Api
+* możliwość pobrania pliku pdf z wykrytą detekcją i naniesionymi zmianami
 
 ## Architektura
 
