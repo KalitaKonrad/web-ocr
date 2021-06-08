@@ -114,7 +114,7 @@ Do stylowania każdego z powyższych komponentów została użyta ChakraUI. Do d
 
 ## Interakcja użytkownika
 
-Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyżej. W skrócie jest to panel boczny z miniaturkowym podglądem kilku stron na raz PDFa, w centrum ekranu ma dwa pola tekstowe - po lewym obecna strona na, której się znajduje a po prawej wynik OCR z pliku, który wyśle do analizy. Na dole ekranu znajduje się przycisk z napisem "Dodaj pliki". 
+Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyżej. W skrócie jest to panel boczny z miniaturkowym podglądem kilku stron na raz PDFa, w centrum ekranu ma dwa pola tekstowe - po lewym obecna strona na, której się znajduje a po prawej wynik OCR z pliku, który wyśle do analizy. Na dole ekranu znajduje się przycisk z napisem "Dodaj pliki" oraz przycisk do wygenerowania dokumentu PDF z detekcji, a następnie jego pobrania. 
 1. Pierwszym krokiem do rozpoczęcia interakcji ze stroną jest jego naciśnięcie.
 2. Wyświetlone zostanie okno, gdzie możemy przeciągnąć interesujący nas plik PDF lub możemy wybrać go z kolejnego okna, które pojawi się po kliknięciu w obrębie pola okna. Plik PDF musi znajdować się u nas lokalnie na komputerze. Warto tutaj dodać, że format PDF jest jedynym akceptowalnym formatem przesyłanego pliku - jeśli wybrany plik będzie miał inny format to nie zostanie on zaakceptowany i stosowna informacja zostanie wyświetlona użytkownikowi.
 3. Po dodaniu pliku zatwierdzamy przyciskiem "Wyślij" - czekamy aż plik zostanie zapisany w Google Cloud Storage i zostanie wykonana na nim operacja OCR. Gdy to się wykona - zamykane jest okno dodawania pliku i widzimy rezultat. 
@@ -134,3 +134,15 @@ Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyże
 5. Po wykonaniu powyższych kroków możemy uruchomić aplikację z terminala komendą `yarn dev`. Należy znajdować się w głównym katalogu projektu. 
 
 Aplikacja domyślnie będzie znajdować się na porcie `3000` i tam też z niej można korzystać po wejściu w przeglądarce na adres `localhost:3000`. 
+
+## Instrukcja użytkowania
+1. Po wejściu na stronę dodaj plik pdf ze swojego lokalnego katalogu. Zrobisz to za pomocą przycisku "Dodaj pliki"
+![screen1](https://github.com/KalitaKonrad/web-ocr/blob/main/docs_images/screen1.PNG)
+2. Zobaczysz wyskakujący modal gdzie możesz dodać swój plik
+![screen2](https://github.com/KalitaKonrad/web-ocr/blob/main/docs_images/screen2.PNG)
+3. Po dodaniu pliku pdf i kliknięciu 'Zapisz' rozpocznie się detekcja. W zależności od wielkości pliku może to chwilę potrwać. Już teraz możesz zobaczyć podgląd swojego pliku.
+![screen3](https://github.com/KalitaKonrad/web-ocr/blob/main/docs_images/screen3.PNG)
+4. Gdy detekcja się ukończy zobaczysz wykryty tekst, a w prawym panelu jego właściwości. W lewym panelu możesz zobaczyć miniaturki innych stron i szybko przejść na nie. Gdy twoich stron jest więcej, poprostu przewiń w dół trzymając kursor na lewym panelu. Wykryty tekst może być zmieniony przez ciebie. Po przejsciu na inne strony dokumentu twoje zmiany zostą zachowane.
+![screen4](https://github.com/KalitaKonrad/web-ocr/blob/main/docs_images/screen4.PNG)
+5. Możesz także pobrać swoje wprowadzone zmiany jako plik PDF. Aby to zrobić kliknij w 'Wygeneruj link do pobrania', a następnie 'Pobierz PDF'.
+![screen5](https://github.com/KalitaKonrad/web-ocr/blob/main/docs_images/screen5.PNG)
