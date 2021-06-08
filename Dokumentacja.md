@@ -122,3 +122,15 @@ Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyże
 5.  Używając lewego panelu możemy poruszać się po PDFie i podglądać inne strony. Każda ze stron, która aktualnie mamy zaznaczoną widzimy w centrum okna przeglądarki po lewej stronie w powiększeniu. 
 6. W prawym panelu możemy podglądnąć właściwości pliku
  
+## Instrukcja instalacji i uruchomienia aplikacji
+
+1. W celu instalacji musimy pograć kod źródłowy z repozytorium poprzez `git clone https://github.com/KalitaKonrad/web-ocr`.
+2. Do uruchomienia aplikacji potrzebne będzie również środowisko Node, które możemy pobrać stąd: `https://nodejs.org/en/download/`.
+3. Następnie potrzebne będzie nam konto Google Cloud. Należy stworzyć plik `account.json` w folderze `./secrets`, który tworzymy w głównym katalogu projektu. Instrukcja do wygenerowania tego pliku opisana jest w dokumentacji Google Cloud - `https://cloud.google.com/iam/docs/creating-managing-service-account-keys`
+4. Potrzebny będzie jeszcze plik .env znajdujący się w głównym katalogu projektu - należy go samemu stworzyć i wypełnić wartościami na podstawie pliku `env.example`. Gdzie odpowiednio:
+- `GOOGLE_APPLICATION_CREDENTIALS` - lokalizacja pliku account.json -> normalnie będzie to ./secrets/account.json
+- `CLOUD_BUCKET_OUTPUT_PREFIX` - nazwa podfolderu, w którym zapisują się wyniki operacji OCR wykonywanej przez API Google'a
+- `CLOUD_BUCKET_NAME` - nazwa bucketu, na którym będziemy operować podczas korzystania z aplikacji
+5. Po wykonaniu powyższych kroków możemy uruchomić aplikację z terminala komendą `yarn dev`. Należy znajdować się w głównym katalogu projektu. 
+
+Aplikacja domyślnie będzie znajdować się na porcie `3000` i tam też z niej można korzystać po wejściu w przeglądarce na adres `localhost:3000`. 
