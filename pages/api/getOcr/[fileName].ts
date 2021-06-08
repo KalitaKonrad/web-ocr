@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export const outputPrefix = "outputs";
-export const bucketName = "web-ocr-storage";
+export const outputPrefix = process.env.CLOUD_BUCKET_OUTPUT_PREFIX;
+export const bucketName = process.env.CLOUD_BUCKET_NAME;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const vision = require("@google-cloud/vision").v1;
