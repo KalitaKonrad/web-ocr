@@ -1,5 +1,7 @@
 # web_ocr
 
+Dokumentacja w pliku [doc](https://github.com/KalitaKonrad/web-ocr/blob/main/Dokumentacja.md)
+
 This project was generated with [superplate](https://github.com/pankod/superplate).
 
 ## Getting Started
