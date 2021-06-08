@@ -6,11 +6,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   // Creates a client
   const client = new vision.ImageAnnotatorClient();
   // Bucket where the file resides
-  const bucketName = "web-ocr-storage";
+  const bucketName = process.env.CLOUD_BUCKET_NAME;
   // Path to PDF file within bucket
   const fileName = "lorem-ipsum.pdf";
   // The folder to store the results
-  const outputPrefix = "outputs";
+  const outputPrefix = process.env.CLOUD_BUCKET_OUTPUT_PREFIX;
 
   const gcsSourceUri = `gs://${bucketName}/${fileName}`;
   const gcsDestinationUri = `gs://${bucketName}/${outputPrefix}/`;
