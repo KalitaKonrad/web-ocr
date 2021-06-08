@@ -15,6 +15,11 @@ const DownloadButton: React.FC = () => {
   const [isDocumentGenerated, setIsDocumentGenerated] = useState(false);
   const { file, ocrCompleted } = useContext(AppContext);
 
+  const getFileName = (fileName) => {
+    const split = fileName.split(".");
+    return split[0];
+  };
+
   return (
     <Box
       marginBottom={4}
@@ -48,7 +53,7 @@ const DownloadButton: React.FC = () => {
           <Box flex={1}>
             <PDFDownloadLink
               document={(<MyPdfDocument />) as any}
-              fileName={`${file?.name}.pdf`}
+              fileName={`${getFileName(file?.name)}-ocr.pdf`}
             >
               {({ loading }) =>
                 loading ? "ładowanie dokumentu..." : <Text>Pobierz PDF</Text>
