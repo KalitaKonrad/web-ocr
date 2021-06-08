@@ -10,6 +10,7 @@ interface EditsStore {
   setPagesData: (index: number, pageData: PageObject) => void;
   isDetectionLoading: boolean;
   setIsDetectionLoading: (value: boolean) => void;
+  cleanDetectionEdit: () => void;
 }
 
 const editHelper = (page: number, edit: string, state: EditsStore) => {
@@ -28,6 +29,7 @@ export const useStore = create<EditsStore>((set) => ({
   detectionEditsArray: [],
   changeDetectionEdit: (page, edit) =>
     set((state) => ({ detectionEditsArray: editHelper(page, edit, state) })),
+  cleanDetectionEdit: () => set(() => ({ detectionEditsArray: [] })),
   numberOfPages: 0,
   setNumberOfPages: (pageNumber) => set({ numberOfPages: pageNumber }),
   pagesData: [],

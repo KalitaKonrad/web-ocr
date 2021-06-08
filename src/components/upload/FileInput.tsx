@@ -2,6 +2,7 @@ import { Box, Button, Flex, FormControl, Input, Text } from "@chakra-ui/react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import Alert from "@components/shared/Alert";
+import { useStore } from "../../store/useStore";
 
 interface FileInputProps {
   setFile: React.Dispatch<File>;
@@ -12,6 +13,7 @@ interface FileInputProps {
 const MAX_FILE_SIZE = 5_242_880; // 5 MB
 
 const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
+  const cleanDetectionEdit = useStore((state) => state.cleanDetectionEdit);
   const [fileError, setFileError] = useState("");
   const [isExtensionError, setIsExtensionError] = useState(false);
 
@@ -29,8 +31,6 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
       );
       return;
     }
-
-    console.log("HEHEHE: ==> ", file);
 
     setFile(file);
     setFileError("");
@@ -51,6 +51,7 @@ const FileInput: React.FC<FileInputProps> = ({ setFile, file, loading }) => {
 
   const cleanUpModal = () => {
     setFile(null);
+    cleanDetectionEdit();
     setFileError("");
   };
 
