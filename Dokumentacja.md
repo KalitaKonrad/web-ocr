@@ -124,8 +124,8 @@ Użytkownik po wejściu w naszą aplikację ma dostępny interfejs opisany wyże
  
 ## Instrukcja instalacji i uruchomienia aplikacji
 
-1. W celu instalacji musimy pograć kod źródłowy z repozytorium poprzez `git clone https://github.com/KalitaKonrad/web-ocr`.
-2. Do uruchomienia aplikacji potrzebne będzie również środowisko Node, które możemy pobrać stąd: `https://nodejs.org/en/download/`.
+1. W celu instalacji musimy pobrać kod źródłowy z repozytorium poprzez komendę w terminalu - `git clone https://github.com/KalitaKonrad/web-ocr`.
+2. Do uruchomienia aplikacji potrzebne będzie również środowisko `Node`, które możemy pobrać dla każdego z najpopularniejszych systemów operacyjnych stąd: `https://nodejs.org/en/download/`.
 3. Następnie potrzebne będzie nam konto Google Cloud. Należy stworzyć plik `account.json` w folderze `./secrets`, który tworzymy w głównym katalogu projektu. Instrukcja do wygenerowania tego pliku opisana jest w dokumentacji Google Cloud - `https://cloud.google.com/iam/docs/creating-managing-service-account-keys`
 4. Potrzebny będzie jeszcze plik .env znajdujący się w głównym katalogu projektu - należy go samemu stworzyć i wypełnić wartościami na podstawie pliku `env.example`. Gdzie odpowiednio:
 - `GOOGLE_APPLICATION_CREDENTIALS` - lokalizacja pliku account.json -> normalnie będzie to ./secrets/account.json
