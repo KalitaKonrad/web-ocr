@@ -19,6 +19,8 @@
   * [Opis poszczególnych komponentów](#opis-poszczególnych-komponentów)
 * [Wymagania niefunkcjonalne](#wymagania-niefunkcjonalne)
 * [Interakcja użytkownika](#interakcja-użytkownika)
+* [Instrukcja instalacji i uruchomienia aplikacji](#instrukcja-instalacji-i-uruchomienia-aplikacji)
+* [Instrukcja użytkowania](#instrukcja-użytkowania)
 
 ## Założenia projektu
 
