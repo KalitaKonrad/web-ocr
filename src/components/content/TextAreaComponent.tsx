@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { Box, Skeleton, Textarea } from "@chakra-ui/react";
 import { useStore } from "../../store/useStore";
 import { AppContext } from "../../appContext/appContext";
@@ -14,12 +14,27 @@ const TextAreaComponent: React.FC = () => {
     useCallback((state) => state.changeDetectionEdit, []),
   );
 
+  const setSelectedText = useStore(
+    useCallback((state) => state.setSelectedText, []),
+  );
+
   const { selectedPage } = useContext(AppContext);
   const textAreaValue = detectionEditsArray[selectedPage];
 
   const handleChange = (event) => {
     changeDetectionEdit(selectedPage, event.target.value);
   };
+
+  useEffect(() => {
+    if (window) {
+      document.onmouseup = () => {
+        const text = window.getSelection().toString();
+        console.log(text);
+
+        setSelectedText(text);
+      };
+    }
+  }, []);
 
   if (isDetectionLoading)
     return (

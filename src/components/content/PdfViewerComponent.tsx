@@ -1,8 +1,15 @@
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import { Box, Button, ButtonGroup, Flex, Icon, Text } from "@chakra-ui/react";
 import { FaRegFilePdf } from "react-icons/fa";
 import { Document, Page, pdfjs } from "react-pdf";
 import { AppContext } from "src/appContext/appContext";
+import { useStore } from "../../store/useStore";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const PDF_SCALE_FACTOR = 1.41;
@@ -51,6 +58,30 @@ const PdfViewerComponent = () => {
     documentDiv["current"].style.justifyContent = "center";
     documentDiv["current"].style.alignItems = "center";
   };
+
+  const selectedText = useStore((state) => state.selectedText);
+  const responses = useStore((state) => state.responses);
+  console.log("responses currently", responses);
+
+  useEffect(() => {
+    const words = selectedText.split(" ");
+    console.log("responses in here", responses);
+
+    const pageResponse = responses[selectedPage];
+    console.log("pageResponse", pageResponse);
+
+    // Object.values(responses).forEach((arr) => {
+    //   console.log("arr", arr);
+    //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //   // @ts-ignore
+    //   arr.forEach((responseObj) => {
+    //     if (responseObj.fullTextAnnotation.text.includes(selectedText)) {
+    //       console.log("text", selectedText);
+    //       console.log("found in", responseObj.fullTextAnnotation.text);
+    //     }
+    //   });
+    // });
+  }, [selectedText]);
 
   useEffect(() => {
     if (file) {

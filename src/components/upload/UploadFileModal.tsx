@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import {
   Button,
   Modal,
@@ -11,7 +11,7 @@ import {
 import FileInput from "./FileInput";
 import { AppContext } from "src/appContext/appContext";
 import axios from "axios";
-import { useStore } from "src/store/useStore";
+import { ResponseObj, useStore } from "src/store/useStore";
 import Alert from "@components/shared/Alert";
 
 interface UploadFileModalProps {
@@ -54,6 +54,10 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     });
   };
 
+  const setResponses = useStore(useCallback((state) => state.setResponses, []));
+  const responsesState = useStore((state) => state.responses);
+  console.log("responsesState", responsesState);
+
   const assignDataToStore = (output) => {
     if (output.length === 0) {
       return;
@@ -62,9 +66,16 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     // set state for each page
     output.forEach((file) => {
       const { responses } = JSON.parse(file);
+      // responses is an array of objects with properties fullTextAnnotation and context
+      responses.forEach((res: ResponseObj) => {});
+
+      console.log("responsesState", responsesState);
+      console.log("responses stet", responses);
+
       responses.forEach(({ fullTextAnnotation, context }) => {
         changeDetectionEdit(context.pageNumber, fullTextAnnotation.text);
         setPagesData(context.pageNumber, fullTextAnnotation.pages[0]);
+        setResponses(res.context.pageNumber - 1, res);
       });
     });
 
