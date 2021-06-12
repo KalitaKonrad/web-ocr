@@ -9,6 +9,12 @@ export interface ResponseObj {
           boundingBox: {
             normalizedVertices: Array<{ x: number; y: number }>;
           };
+          words: Array<{
+            boundingBox: {
+              normalizedVertices: Array<{ x: number; y: number }>;
+            };
+            symbols: Array<{ text: string }>; // and other properties, but not necessary I guess
+          }>;
         }>;
       }>;
       height: number;

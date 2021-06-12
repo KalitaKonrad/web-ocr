@@ -1,15 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useContext,
-  useCallback,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Box, Button, ButtonGroup, Flex, Icon, Text } from "@chakra-ui/react";
 import { FaRegFilePdf } from "react-icons/fa";
 import { Document, Page, pdfjs } from "react-pdf";
 import { AppContext } from "src/appContext/appContext";
 import { useStore } from "../../store/useStore";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const PDF_SCALE_FACTOR = 1.41;
@@ -22,6 +17,7 @@ const PdfViewerComponent = () => {
   const canvas = useRef() as any;
   const documentDiv = useRef() as any;
   const canvasDiv = useRef() as any;
+  const divWrappingPageRef = useRef() as any;
 
   const handleResize = () => {
     onCanvasLoadSuccess();
@@ -63,38 +59,51 @@ const PdfViewerComponent = () => {
   const responses = useStore((state) => state.responses);
   console.log("responses currently", responses);
 
+  const [rectanglePercentageHeight, setRectanglePercentageHeight] = useState(0);
+  const [rectanglePercentageTop, setRectanglePercentageTop] = useState(0);
+
   useEffect(() => {
     if (selectedText === "") {
       return;
     }
 
-    const words = selectedText.split(" ");
-    console.log("responses in here", responses);
-
-    const pageResponse = responses[selectedPage];
+    const pageResponse = responses[selectedPage - 1];
     console.log("pageResponse", pageResponse);
 
+    // TODO: IMPORTANT!!!!!!!!
+    // TODO: CHANGE ALL THESE FOREACH LOOPS TO NORMAL FOR LOOP SINCE WE WANT TO BREAK
+    // OUT OF ANY LOOP IF WE MATCH THE TEXT
     pageResponse.fullTextAnnotation.pages.forEach((page) => {
       page.blocks.forEach((block) =>
-        block.paragraphs.forEach((par) =>
-          par.boundingBox.normalizedVertices.forEach((ver) =>
-            console.log("ver", ver),
-          ),
-        ),
+        block.paragraphs.forEach((par) => {
+          const textInCertainParagraph = par.words
+            .map((word) => word.symbols.map((symbol) => symbol.text).join(""))
+            .join(" ");
+
+          // TODO: check if selectedText phrase is contained in this paragraph (will not always work - for duplicate paragraphs it will return the first one)
+          const containsSelectedPhrase = textInCertainParagraph.includes(
+            selectedText,
+          );
+
+          if (containsSelectedPhrase) {
+            const boundingBox = par.boundingBox;
+
+            // we just need to know the minimum y coordinate and maximum for the height of our red rectangle highlighting
+            // the edited paragraph. Only y because this rectangle is full width so x is not necessary
+            const yCoords = boundingBox.normalizedVertices.map(
+              (coords) => coords.y,
+            );
+            const minY = Math.min(...yCoords) * 100; // * 100 because it is normalizedValue so it's between [0, 1]
+            const maxY = Math.max(...yCoords) * 100;
+
+            setRectanglePercentageTop(minY);
+            // top of rectangle element will be minY and height will be the length between maxY and minY
+            const percentageHeight = Math.abs(maxY - minY);
+            setRectanglePercentageHeight(percentageHeight);
+          }
+        }),
       );
     });
-
-    // Object.values(responses).forEach((arr) => {
-    //   console.log("arr", arr);
-    //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //   // @ts-ignore
-    //   arr.forEach((responseObj) => {
-    //     if (responseObj.fullTextAnnotation.text.includes(selectedText)) {
-    //       console.log("text", selectedText);
-    //       console.log("found in", responseObj.fullTextAnnotation.text);
-    //     }
-    //   });
-    // });
   }, [selectedText]);
 
   useEffect(() => {
@@ -137,13 +146,32 @@ const PdfViewerComponent = () => {
             file={url}
             onLoadSuccess={onDocumentLoadSuccess}
           >
-            <Page
-              renderTextLayer={false}
-              onLoadSuccess={onCanvasLoadSuccess}
-              inputRef={canvasDiv}
-              canvasRef={canvas}
-              pageNumber={selectedPage}
-            />
+            <Box ref={divWrappingPageRef} position="relative">
+              {selectedText && (
+                <Box
+                  position="absolute"
+                  top={`${rectanglePercentageTop - 0.25}%`} // I subtract one percent so that the border doesn't cut the text in half
+                  left={0}
+                  height={`${
+                    divWrappingPageRef?.current?.clientHeight
+                      ? (rectanglePercentageHeight / 100) *
+                          divWrappingPageRef.current.clientHeight +
+                        5
+                      : 0 // I add some pixels so that the border doesn't cut the text in half
+                  }`}
+                  zIndex={1000}
+                  border="2px solid red"
+                  w="100%"
+                />
+              )}
+              <Page
+                renderTextLayer={false}
+                onLoadSuccess={onCanvasLoadSuccess}
+                inputRef={canvasDiv}
+                canvasRef={canvas}
+                pageNumber={selectedPage}
+              />
+            </Box>
             {renderButtonGroup()}
           </Document>
         </Box>
