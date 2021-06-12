@@ -66,15 +66,16 @@ const UploadFileModal: React.FC<UploadFileModalProps> = ({
     // set state for each page
     output.forEach((file) => {
       const { responses } = JSON.parse(file);
-      // responses is an array of objects with properties fullTextAnnotation and context
-      responses.forEach((res: ResponseObj) => {});
 
       console.log("responsesState", responsesState);
       console.log("responses stet", responses);
 
-      responses.forEach(({ fullTextAnnotation, context }) => {
-        changeDetectionEdit(context.pageNumber, fullTextAnnotation.text);
-        setPagesData(context.pageNumber, fullTextAnnotation.pages[0]);
+      responses.forEach((res) => {
+        changeDetectionEdit(
+          res.context.pageNumber,
+          res.fullTextAnnotation.text,
+        );
+        setPagesData(res.context.pageNumber, res.fullTextAnnotation.pages[0]);
         setResponses(res.context.pageNumber - 1, res);
       });
     });

@@ -64,11 +64,25 @@ const PdfViewerComponent = () => {
   console.log("responses currently", responses);
 
   useEffect(() => {
+    if (selectedText === "") {
+      return;
+    }
+
     const words = selectedText.split(" ");
     console.log("responses in here", responses);
 
     const pageResponse = responses[selectedPage];
     console.log("pageResponse", pageResponse);
+
+    pageResponse.fullTextAnnotation.pages.forEach((page) => {
+      page.blocks.forEach((block) =>
+        block.paragraphs.forEach((par) =>
+          par.boundingBox.normalizedVertices.forEach((ver) =>
+            console.log("ver", ver),
+          ),
+        ),
+      );
+    });
 
     // Object.values(responses).forEach((arr) => {
     //   console.log("arr", arr);
