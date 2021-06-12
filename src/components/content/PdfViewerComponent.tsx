@@ -1,5 +1,13 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Box, Button, ButtonGroup, Flex, Icon, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Flex,
+  Icon,
+  Text,
+  useToast,
+} from "@chakra-ui/react";
 import { FaRegFilePdf } from "react-icons/fa";
 import { Document, Page, pdfjs } from "react-pdf";
 import { AppContext } from "src/appContext/appContext";
@@ -13,6 +21,7 @@ const PdfViewerComponent = () => {
   const [numPages, setNumPages] = useState(null);
   const [url, setUrl] = useState(null);
   const { file, selectedPage, setSelectedPage } = useContext(AppContext);
+  const toast = useToast();
 
   const canvas = useRef() as any;
   const documentDiv = useRef() as any;
@@ -57,35 +66,46 @@ const PdfViewerComponent = () => {
 
   const selectedText = useStore((state) => state.selectedText);
   const responses = useStore((state) => state.responses);
-  console.log("responses currently", responses);
 
   const [rectanglePercentageHeight, setRectanglePercentageHeight] = useState(0);
   const [rectanglePercentageTop, setRectanglePercentageTop] = useState(0);
+  const [rectangleVisible, setRectangleVisible] = useState(false);
+  const [isSelectionMatched, setIsSelectionMatched] = useState(false);
 
   useEffect(() => {
-    if (selectedText === "") {
+    if (selectedText === "" || selectedText === " " || selectedText === "\n") {
+      setRectangleVisible(false);
       return;
     }
+    setRectangleVisible(true);
+    matchSelectedText();
+  }, [selectedText]);
 
+  useEffect(() => {
+    if (file) {
+      setUrl(URL.createObjectURL(file));
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [file]);
+
+  const matchSelectedText = () => {
     const pageResponse = responses[selectedPage - 1];
-    console.log("pageResponse", pageResponse);
+    let iterator = 0;
 
-    // TODO: IMPORTANT!!!!!!!!
-    // TODO: CHANGE ALL THESE FOREACH LOOPS TO NORMAL FOR LOOP SINCE WE WANT TO BREAK
-    // OUT OF ANY LOOP IF WE MATCH THE TEXT
-    pageResponse.fullTextAnnotation.pages.forEach((page) => {
-      page.blocks.forEach((block) =>
-        block.paragraphs.forEach((par) => {
+    for (const page of pageResponse.fullTextAnnotation.pages) {
+      for (const block of page.blocks) {
+        for (const par of block.paragraphs) {
           const textInCertainParagraph = par.words
             .map((word) => word.symbols.map((symbol) => symbol.text).join(""))
             .join(" ");
 
-          // TODO: check if selectedText phrase is contained in this paragraph (will not always work - for duplicate paragraphs it will return the first one)
           const containsSelectedPhrase = textInCertainParagraph.includes(
             selectedText,
           );
 
           if (containsSelectedPhrase) {
+            setIsSelectionMatched(true);
             const boundingBox = par.boundingBox;
 
             // we just need to know the minimum y coordinate and maximum for the height of our red rectangle highlighting
@@ -100,19 +120,18 @@ const PdfViewerComponent = () => {
             // top of rectangle element will be minY and height will be the length between maxY and minY
             const percentageHeight = Math.abs(maxY - minY);
             setRectanglePercentageHeight(percentageHeight);
+            return;
           }
-        }),
-      );
-    });
-  }, [selectedText]);
-
-  useEffect(() => {
-    if (file) {
-      setUrl(URL.createObjectURL(file));
+        }
+        iterator = iterator + 1;
+        if (iterator === page.blocks.length) {
+          console.log("NIE DOPASOWALEM ++++");
+          setRectangleVisible(false);
+          setIsSelectionMatched(false);
+        }
+      }
     }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [file]);
+  };
 
   const renderButtonGroup = () => (
     <ButtonGroup bottom={2} pos="absolute" variant="outline" spacing="6">
@@ -147,7 +166,7 @@ const PdfViewerComponent = () => {
             onLoadSuccess={onDocumentLoadSuccess}
           >
             <Box ref={divWrappingPageRef} position="relative">
-              {selectedText && (
+              {selectedText && rectangleVisible && (
                 <Box
                   position="absolute"
                   top={`${rectanglePercentageTop - 0.25}%`} // I subtract one percent so that the border doesn't cut the text in half
@@ -174,6 +193,15 @@ const PdfViewerComponent = () => {
             </Box>
             {renderButtonGroup()}
           </Document>
+          {!isSelectionMatched &&
+            toast({
+              title: "Nie dopasowano.",
+              description: "Nie byliśmy w stanie dopsaować tesktu.",
+              status: "warning",
+              duration: 500,
+              isClosable: false,
+              onCloseComplete: () => setIsSelectionMatched(true),
+            })}
         </Box>
       ) : (
         <Flex
